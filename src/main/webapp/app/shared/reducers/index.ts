@@ -11,6 +11,22 @@ import activate, { ActivateState } from 'app/modules/account/activate/activate.r
 import password, { PasswordState } from 'app/modules/account/password/password.reducer';
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
+// prettier-ignore
+import category, {
+  CategoryState
+} from 'app/entities/category/category.reducer';
+// prettier-ignore
+import city, {
+  CityState
+} from 'app/entities/city/city.reducer';
+// prettier-ignore
+import district, {
+  DistrictState
+} from 'app/entities/district/district.reducer';
+// prettier-ignore
+import postingItem, {
+  PostingItemState
+} from 'app/entities/posting-item/posting-item.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -23,6 +39,10 @@ export interface IRootState {
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
+  readonly category: CategoryState;
+  readonly city: CityState;
+  readonly district: DistrictState;
+  readonly postingItem: PostingItemState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -37,6 +57,10 @@ const rootReducer = combineReducers<IRootState>({
   passwordReset,
   password,
   settings,
+  category,
+  city,
+  district,
+  postingItem,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

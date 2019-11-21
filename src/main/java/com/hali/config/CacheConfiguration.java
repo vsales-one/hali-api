@@ -43,6 +43,10 @@ public class CacheConfiguration {
             createCache(cm, com.hali.domain.User.class.getName());
             createCache(cm, com.hali.domain.Authority.class.getName());
             createCache(cm, com.hali.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.hali.domain.Category.class.getName());
+            createCache(cm, com.hali.domain.City.class.getName());
+            createCache(cm, com.hali.domain.District.class.getName());
+            createCache(cm, com.hali.domain.PostingItem.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
