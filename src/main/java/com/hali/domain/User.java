@@ -34,6 +34,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private Long id;
 
     @NotNull
+    @Size(max = 50)
+    @Column(name = "uid", length = 50, unique = true)
+    private String uid;
+
+    @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
@@ -99,6 +104,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getLogin() {

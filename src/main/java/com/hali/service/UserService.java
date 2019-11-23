@@ -8,9 +8,11 @@ import com.hali.repository.UserRepository;
 import com.hali.security.AuthoritiesConstants;
 import com.hali.security.SecurityUtils;
 import com.hali.service.dto.UserDTO;
+import com.hali.service.util.RandomUserNameGenerator;
 import com.hali.service.util.RandomUtil;
 import com.hali.web.rest.errors.*;
 
+import com.hali.web.rest.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -110,6 +113,7 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail().toLowerCase());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
+        newUser.setUid(StringUtil.generateUUID());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -133,6 +137,38 @@ public class UserService {
         return true;
     }
 
+    public User registerFirebaseUser(String fullName, String uid, String email) {
+        User newUser=userRepository.findOneByEmailIgnoreCase(email).orElse(null); // todo implement best practise handling of optional type
+        if(newUser!=null){
+            newUser.setUid(uid);
+            userRepository.save(newUser);
+        }else {
+            newUser = new User();
+            Set<Authority> authorities = new HashSet<>();
+            authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+            String encryptedPassword = passwordEncoder.encode(UUID.randomUUID().toString());
+            // firebase user gets initially a generated password
+            newUser.setPassword(encryptedPassword);
+            // firebase user gets initially a generated username
+            RandomUserNameGenerator gen = new RandomUserNameGenerator(15, ThreadLocalRandom.current());
+            newUser.setLogin(gen.nextString());
+
+            String[] splitedFullname = fullName.split("\\s+");
+            if (splitedFullname.length > 0) {
+                newUser.setFirstName(splitedFullname[0]);
+                if (splitedFullname.length > 1)
+                    newUser.setLastName(splitedFullname[1]);
+            }
+            newUser.setEmail(email);
+            newUser.setActivated(true);
+            newUser.setAuthorities(authorities);
+            newUser.setUid(uid);
+            userRepository.save(newUser);
+            log.debug("Created Information for User: {}", newUser);
+        }
+        return newUser;
+    }
+
     public User createUser(UserDTO userDTO) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
@@ -150,6 +186,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        user.setUid(StringUtil.generateUUID());
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
@@ -292,5 +329,10 @@ public class UserService {
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> loadUserByUID(String uid) {
+        return userRepository.findOneWithAuthoritiesByUid(uid);
     }
 }
