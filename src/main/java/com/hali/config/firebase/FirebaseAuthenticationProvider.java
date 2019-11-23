@@ -25,6 +25,8 @@ public class FirebaseAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userService;
 
+//    @Autowired
+//    private  UserService userService;
 
 	public boolean supports(Class<?> authentication) {
 		return (FirebaseAuthenticationToken.class.isAssignableFrom(authentication));
