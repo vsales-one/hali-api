@@ -1,5 +1,8 @@
 package com.hali;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.hali.config.ApplicationProperties;
 import com.hali.config.DefaultProfileUtil;
 
@@ -14,7 +17,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -25,6 +30,7 @@ import java.util.Collection;
 public class HaliApp implements InitializingBean {
 
     private static final Logger log = LoggerFactory.getLogger(HaliApp.class);
+    private static final String FB_BASE_URL = "https://hali-ca190.firebaseio.com";
 
     private final Environment env;
 
@@ -58,10 +64,23 @@ public class HaliApp implements InitializingBean {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
+
+
+
         SpringApplication app = new SpringApplication(HaliApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
+
+        try {
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("/hali-firebase-service-account.json").getInputStream()))
+                .setDatabaseUrl(FB_BASE_URL)
+                .build();
+            FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void logApplicationStartup(Environment env) {

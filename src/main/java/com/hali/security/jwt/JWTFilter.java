@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -19,6 +20,8 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    public static final String FIREBASE_AUTHORIZATION_HEADER = "X-Firebase-Auth";
 
     private TokenProvider tokenProvider;
 
@@ -30,10 +33,23 @@ public class JWTFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
         throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String jwt = resolveToken(httpServletRequest);
-        if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
-            Authentication authentication = this.tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String firebaseTokenJwt = httpServletRequest.getHeader(FIREBASE_AUTHORIZATION_HEADER);
+
+        //Handle firebase token
+        if(StringUtils.hasText(firebaseTokenJwt)){
+            Authentication authentication = this.tokenProvider.getFireBaseAuthentication(firebaseTokenJwt);
+
+            if(authentication != null){
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
+        }else{
+            String jwt = resolveToken(httpServletRequest);
+            if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
+                Authentication authentication = this.tokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

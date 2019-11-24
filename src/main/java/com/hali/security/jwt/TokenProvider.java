@@ -5,14 +5,15 @@ import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import autovalue.shaded.com.google$.auto.service.$AutoService;
+import com.hali.service.FirebaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +21,10 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
 
 @Component
 public class TokenProvider implements InitializingBean {
@@ -35,6 +40,9 @@ public class TokenProvider implements InitializingBean {
     private long tokenValidityInMillisecondsForRememberMe;
 
     private final JHipsterProperties jHipsterProperties;
+
+    @Autowired
+    private FirebaseService firebaseService;
 
     public TokenProvider(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
@@ -96,6 +104,17 @@ public class TokenProvider implements InitializingBean {
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
+
+
+    public Authentication getFireBaseAuthentication(String token) {
+        FirebaseTokenHolder authenticationToken = firebaseService.parseToken(token);
+        if(authenticationToken == null) return null;
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(simpleGrantedAuthority);
+        return new UsernamePasswordAuthenticationToken(authenticationToken, token, authorities);
+    }
+
 
     public boolean validateToken(String authToken) {
         try {
