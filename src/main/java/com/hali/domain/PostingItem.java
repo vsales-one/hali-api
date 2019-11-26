@@ -64,8 +64,15 @@ public class PostingItem implements Serializable {
     @Column(name = "longitude", precision = 21, scale = 2)
     private BigDecimal longitude;
 
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "district")
+    private String district;
+
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("postingItems")
     private Category category;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -220,6 +227,32 @@ public class PostingItem implements Serializable {
         this.longitude = longitude;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public PostingItem city(String city) {
+        this.city = city;
+        return this;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public PostingItem district(String district) {
+        this.district = district;
+        return this;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -265,6 +298,8 @@ public class PostingItem implements Serializable {
             ", pickupAddress='" + getPickupAddress() + "'" +
             ", latitude=" + getLatitude() +
             ", longitude=" + getLongitude() +
+            ", city='" + getCity() + "'" +
+            ", district='" + getDistrict() + "'" +
             "}";
     }
 }

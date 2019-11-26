@@ -9,7 +9,8 @@
             "relationshipValidateRules": [
                 "required"
             ],
-            "otherEntityField": "categoryName"
+            "otherEntityField": "categoryName",
+            "otherEntityRelationshipName": "postingItem"
         }
     ],
     "fields": [
@@ -77,6 +78,14 @@
         {
             "fieldName": "longitude",
             "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "city",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "district",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20191118082240",

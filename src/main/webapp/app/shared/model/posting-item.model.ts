@@ -13,6 +13,8 @@ export interface IPostingItem {
   pickupAddress?: string;
   latitude?: number;
   longitude?: number;
+  city?: string;
+  district?: string;
   categoryCategoryName?: string;
   categoryId?: number;
 }

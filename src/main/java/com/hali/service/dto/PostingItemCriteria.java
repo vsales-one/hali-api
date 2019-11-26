@@ -50,6 +50,10 @@ public class PostingItemCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter longitude;
 
+    private StringFilter city;
+
+    private StringFilter district;
+
     private LongFilter categoryId;
 
     public PostingItemCriteria(){
@@ -68,6 +72,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.pickupAddress = other.pickupAddress == null ? null : other.pickupAddress.copy();
         this.latitude = other.latitude == null ? null : other.latitude.copy();
         this.longitude = other.longitude == null ? null : other.longitude.copy();
+        this.city = other.city == null ? null : other.city.copy();
+        this.district = other.district == null ? null : other.district.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
     }
 
@@ -172,6 +178,22 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.longitude = longitude;
     }
 
+    public StringFilter getCity() {
+        return city;
+    }
+
+    public void setCity(StringFilter city) {
+        this.city = city;
+    }
+
+    public StringFilter getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(StringFilter district) {
+        this.district = district;
+    }
+
     public LongFilter getCategoryId() {
         return categoryId;
     }
@@ -203,6 +225,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
             Objects.equals(pickupAddress, that.pickupAddress) &&
             Objects.equals(latitude, that.latitude) &&
             Objects.equals(longitude, that.longitude) &&
+            Objects.equals(city, that.city) &&
+            Objects.equals(district, that.district) &&
             Objects.equals(categoryId, that.categoryId);
     }
 
@@ -221,6 +245,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
         pickupAddress,
         latitude,
         longitude,
+        city,
+        district,
         categoryId
         );
     }
@@ -240,6 +266,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
                 (pickupAddress != null ? "pickupAddress=" + pickupAddress + ", " : "") +
                 (latitude != null ? "latitude=" + latitude + ", " : "") +
                 (longitude != null ? "longitude=" + longitude + ", " : "") +
+                (city != null ? "city=" + city + ", " : "") +
+                (district != null ? "district=" + district + ", " : "") +
                 (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
             "}";
     }

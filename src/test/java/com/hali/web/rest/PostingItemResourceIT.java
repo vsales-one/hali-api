@@ -80,6 +80,12 @@ public class PostingItemResourceIT {
     private static final BigDecimal UPDATED_LONGITUDE = new BigDecimal(2);
     private static final BigDecimal SMALLER_LONGITUDE = new BigDecimal(1 - 1);
 
+    private static final String DEFAULT_CITY = "AAAAAAAAAA";
+    private static final String UPDATED_CITY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DISTRICT = "AAAAAAAAAA";
+    private static final String UPDATED_DISTRICT = "BBBBBBBBBB";
+
     @Autowired
     private PostingItemRepository postingItemRepository;
 
@@ -141,7 +147,9 @@ public class PostingItemResourceIT {
             .endDate(DEFAULT_END_DATE)
             .pickupAddress(DEFAULT_PICKUP_ADDRESS)
             .latitude(DEFAULT_LATITUDE)
-            .longitude(DEFAULT_LONGITUDE);
+            .longitude(DEFAULT_LONGITUDE)
+            .city(DEFAULT_CITY)
+            .district(DEFAULT_DISTRICT);
         // Add required entity
         Category category;
         if (TestUtil.findAll(em, Category.class).isEmpty()) {
@@ -172,7 +180,9 @@ public class PostingItemResourceIT {
             .endDate(UPDATED_END_DATE)
             .pickupAddress(UPDATED_PICKUP_ADDRESS)
             .latitude(UPDATED_LATITUDE)
-            .longitude(UPDATED_LONGITUDE);
+            .longitude(UPDATED_LONGITUDE)
+            .city(UPDATED_CITY)
+            .district(UPDATED_DISTRICT);
         // Add required entity
         Category category;
         if (TestUtil.findAll(em, Category.class).isEmpty()) {
@@ -218,6 +228,8 @@ public class PostingItemResourceIT {
         assertThat(testPostingItem.getPickupAddress()).isEqualTo(DEFAULT_PICKUP_ADDRESS);
         assertThat(testPostingItem.getLatitude()).isEqualTo(DEFAULT_LATITUDE);
         assertThat(testPostingItem.getLongitude()).isEqualTo(DEFAULT_LONGITUDE);
+        assertThat(testPostingItem.getCity()).isEqualTo(DEFAULT_CITY);
+        assertThat(testPostingItem.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
     }
 
     @Test
@@ -395,7 +407,9 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].pickupAddress").value(hasItem(DEFAULT_PICKUP_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
-            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())));
+            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
+            .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())));
     }
     
     @Test
@@ -419,7 +433,9 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
             .andExpect(jsonPath("$.pickupAddress").value(DEFAULT_PICKUP_ADDRESS.toString()))
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.intValue()))
-            .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE.intValue()));
+            .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE.intValue()))
+            .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
+            .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT.toString()));
     }
 
     @Test
@@ -959,6 +975,84 @@ public class PostingItemResourceIT {
 
     @Test
     @Transactional
+    public void getAllPostingItemsByCityIsEqualToSomething() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where city equals to DEFAULT_CITY
+        defaultPostingItemShouldBeFound("city.equals=" + DEFAULT_CITY);
+
+        // Get all the postingItemList where city equals to UPDATED_CITY
+        defaultPostingItemShouldNotBeFound("city.equals=" + UPDATED_CITY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByCityIsInShouldWork() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where city in DEFAULT_CITY or UPDATED_CITY
+        defaultPostingItemShouldBeFound("city.in=" + DEFAULT_CITY + "," + UPDATED_CITY);
+
+        // Get all the postingItemList where city equals to UPDATED_CITY
+        defaultPostingItemShouldNotBeFound("city.in=" + UPDATED_CITY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByCityIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where city is not null
+        defaultPostingItemShouldBeFound("city.specified=true");
+
+        // Get all the postingItemList where city is null
+        defaultPostingItemShouldNotBeFound("city.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByDistrictIsEqualToSomething() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where district equals to DEFAULT_DISTRICT
+        defaultPostingItemShouldBeFound("district.equals=" + DEFAULT_DISTRICT);
+
+        // Get all the postingItemList where district equals to UPDATED_DISTRICT
+        defaultPostingItemShouldNotBeFound("district.equals=" + UPDATED_DISTRICT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByDistrictIsInShouldWork() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where district in DEFAULT_DISTRICT or UPDATED_DISTRICT
+        defaultPostingItemShouldBeFound("district.in=" + DEFAULT_DISTRICT + "," + UPDATED_DISTRICT);
+
+        // Get all the postingItemList where district equals to UPDATED_DISTRICT
+        defaultPostingItemShouldNotBeFound("district.in=" + UPDATED_DISTRICT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByDistrictIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where district is not null
+        defaultPostingItemShouldBeFound("district.specified=true");
+
+        // Get all the postingItemList where district is null
+        defaultPostingItemShouldNotBeFound("district.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllPostingItemsByCategoryIsEqualToSomething() throws Exception {
         // Get already existing entity
         Category category = postingItem.getCategory();
@@ -990,7 +1084,9 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].pickupAddress").value(hasItem(DEFAULT_PICKUP_ADDRESS)))
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
-            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())));
+            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
+            .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT)));
 
         // Check, that the count call also returns 1
         restPostingItemMockMvc.perform(get("/api/posting-items/count?sort=id,desc&" + filter))
@@ -1048,7 +1144,9 @@ public class PostingItemResourceIT {
             .endDate(UPDATED_END_DATE)
             .pickupAddress(UPDATED_PICKUP_ADDRESS)
             .latitude(UPDATED_LATITUDE)
-            .longitude(UPDATED_LONGITUDE);
+            .longitude(UPDATED_LONGITUDE)
+            .city(UPDATED_CITY)
+            .district(UPDATED_DISTRICT);
         PostingItemDTO postingItemDTO = postingItemMapper.toDto(updatedPostingItem);
 
         restPostingItemMockMvc.perform(put("/api/posting-items")
@@ -1071,6 +1169,8 @@ public class PostingItemResourceIT {
         assertThat(testPostingItem.getPickupAddress()).isEqualTo(UPDATED_PICKUP_ADDRESS);
         assertThat(testPostingItem.getLatitude()).isEqualTo(UPDATED_LATITUDE);
         assertThat(testPostingItem.getLongitude()).isEqualTo(UPDATED_LONGITUDE);
+        assertThat(testPostingItem.getCity()).isEqualTo(UPDATED_CITY);
+        assertThat(testPostingItem.getDistrict()).isEqualTo(UPDATED_DISTRICT);
     }
 
     @Test

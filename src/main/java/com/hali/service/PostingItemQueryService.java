@@ -124,6 +124,12 @@ public class PostingItemQueryService extends QueryService<PostingItem> {
             if (criteria.getLongitude() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLongitude(), PostingItem_.longitude));
             }
+            if (criteria.getCity() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCity(), PostingItem_.city));
+            }
+            if (criteria.getDistrict() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDistrict(), PostingItem_.district));
+            }
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCategoryId(),
                     root -> root.join(PostingItem_.category, JoinType.LEFT).get(Category_.id)));

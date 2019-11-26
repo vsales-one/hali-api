@@ -100,6 +100,12 @@ export class PostingItem extends React.Component<IPostingItemProps, IPostingItem
                   <th className="hand" onClick={this.sort('longitude')}>
                     Longitude <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={this.sort('city')}>
+                    City <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={this.sort('district')}>
+                    District <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th>
                     Category <FontAwesomeIcon icon="sort" />
                   </th>
@@ -131,6 +137,8 @@ export class PostingItem extends React.Component<IPostingItemProps, IPostingItem
                     <td>{postingItem.pickupAddress}</td>
                     <td>{postingItem.latitude}</td>
                     <td>{postingItem.longitude}</td>
+                    <td>{postingItem.city}</td>
+                    <td>{postingItem.district}</td>
                     <td>
                       {postingItem.categoryCategoryName ? (
                         <Link to={`category/${postingItem.categoryId}`}>{postingItem.categoryCategoryName}</Link>

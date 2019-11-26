@@ -78,6 +78,14 @@ export class PostingItemDetail extends React.Component<IPostingItemDetailProps> 
               <span id="longitude">Longitude</span>
             </dt>
             <dd>{postingItemEntity.longitude}</dd>
+            <dt>
+              <span id="city">City</span>
+            </dt>
+            <dd>{postingItemEntity.city}</dd>
+            <dt>
+              <span id="district">District</span>
+            </dt>
+            <dd>{postingItemEntity.district}</dd>
             <dt>Category</dt>
             <dd>{postingItemEntity.categoryCategoryName ? postingItemEntity.categoryCategoryName : ''}</dd>
           </dl>

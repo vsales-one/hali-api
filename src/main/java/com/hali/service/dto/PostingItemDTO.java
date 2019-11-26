@@ -41,6 +41,10 @@ public class PostingItemDTO implements Serializable {
 
     private BigDecimal longitude;
 
+    private String city;
+
+    private String district;
+
 
     private Long categoryId;
 
@@ -142,6 +146,22 @@ public class PostingItemDTO implements Serializable {
         this.longitude = longitude;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
     public Long getCategoryId() {
         return categoryId;
     }
@@ -194,6 +214,8 @@ public class PostingItemDTO implements Serializable {
             ", pickupAddress='" + getPickupAddress() + "'" +
             ", latitude=" + getLatitude() +
             ", longitude=" + getLongitude() +
+            ", city='" + getCity() + "'" +
+            ", district='" + getDistrict() + "'" +
             ", category=" + getCategoryId() +
             ", category='" + getCategoryCategoryName() + "'" +
             "}";

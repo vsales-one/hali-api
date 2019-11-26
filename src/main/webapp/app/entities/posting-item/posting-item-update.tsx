@@ -220,6 +220,18 @@ export class PostingItemUpdate extends React.Component<IPostingItemUpdateProps, 
                   <AvField id="posting-item-longitude" type="text" name="longitude" />
                 </AvGroup>
                 <AvGroup>
+                  <Label id="cityLabel" for="posting-item-city">
+                    City
+                  </Label>
+                  <AvField id="posting-item-city" type="text" name="city" />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="districtLabel" for="posting-item-district">
+                    District
+                  </Label>
+                  <AvField id="posting-item-district" type="text" name="district" />
+                </AvGroup>
+                <AvGroup>
                   <Label for="posting-item-category">Category</Label>
                   <AvInput id="posting-item-category" type="select" className="form-control" name="categoryId" required>
                     {categories

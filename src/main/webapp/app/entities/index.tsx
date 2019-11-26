@@ -8,6 +8,7 @@ import Category from './category';
 import City from './city';
 import District from './district';
 import PostingItem from './posting-item';
+import UserProfile from './user-profile';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
@@ -18,6 +19,7 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}/city`} component={City} />
       <ErrorBoundaryRoute path={`${match.url}/district`} component={District} />
       <ErrorBoundaryRoute path={`${match.url}/posting-item`} component={PostingItem} />
+      <ErrorBoundaryRoute path={`${match.url}/user-profile`} component={UserProfile} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
     </Switch>
   </div>
