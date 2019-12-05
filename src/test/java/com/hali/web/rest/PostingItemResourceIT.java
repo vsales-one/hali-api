@@ -274,63 +274,6 @@ public class PostingItemResourceIT {
 
     @Test
     @Transactional
-    public void checkLast_modified_dateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = postingItemRepository.findAll().size();
-        // set the field null
-        postingItem.setLast_modified_date(null);
-
-        // Create the PostingItem, which fails.
-        PostingItemDTO postingItemDTO = postingItemMapper.toDto(postingItem);
-
-        restPostingItemMockMvc.perform(post("/api/posting-items")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(postingItemDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<PostingItem> postingItemList = postingItemRepository.findAll();
-        assertThat(postingItemList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkLast_modified_byIsRequired() throws Exception {
-        int databaseSizeBeforeTest = postingItemRepository.findAll().size();
-        // set the field null
-        postingItem.setLast_modified_by(null);
-
-        // Create the PostingItem, which fails.
-        PostingItemDTO postingItemDTO = postingItemMapper.toDto(postingItem);
-
-        restPostingItemMockMvc.perform(post("/api/posting-items")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(postingItemDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<PostingItem> postingItemList = postingItemRepository.findAll();
-        assertThat(postingItemList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkPickUpTimeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = postingItemRepository.findAll().size();
-        // set the field null
-        postingItem.setPickUpTime(null);
-
-        // Create the PostingItem, which fails.
-        PostingItemDTO postingItemDTO = postingItemMapper.toDto(postingItem);
-
-        restPostingItemMockMvc.perform(post("/api/posting-items")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(postingItemDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<PostingItem> postingItemList = postingItemRepository.findAll();
-        assertThat(postingItemList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void checkStartDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = postingItemRepository.findAll().size();
         // set the field null

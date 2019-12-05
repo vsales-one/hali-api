@@ -27,17 +27,11 @@
         },
         {
             "fieldName": "last_modified_date",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "Instant"
         },
         {
             "fieldName": "last_modified_by",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "String"
         },
         {
             "fieldName": "description",
@@ -45,10 +39,7 @@
         },
         {
             "fieldName": "pickUpTime",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "String"
         },
         {
             "fieldName": "startDate",

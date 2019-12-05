@@ -17,15 +17,12 @@ public class PostingItemDTO implements Serializable {
 
     private String imageUrl;
 
-    @NotNull
     private Instant last_modified_date;
 
-    @NotNull
     private String last_modified_by;
 
     private String description;
 
-    @NotNull
     private String pickUpTime;
 
     @NotNull

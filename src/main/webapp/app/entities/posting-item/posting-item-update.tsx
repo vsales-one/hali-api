@@ -125,23 +125,13 @@ export class PostingItemUpdate extends React.Component<IPostingItemUpdateProps, 
                     name="last_modified_date"
                     placeholder={'YYYY-MM-DD HH:mm'}
                     value={isNew ? null : convertDateTimeFromServer(this.props.postingItemEntity.last_modified_date)}
-                    validate={{
-                      required: { value: true, errorMessage: 'This field is required.' }
-                    }}
                   />
                 </AvGroup>
                 <AvGroup>
                   <Label id="last_modified_byLabel" for="posting-item-last_modified_by">
                     Last Modified By
                   </Label>
-                  <AvField
-                    id="posting-item-last_modified_by"
-                    type="text"
-                    name="last_modified_by"
-                    validate={{
-                      required: { value: true, errorMessage: 'This field is required.' }
-                    }}
-                  />
+                  <AvField id="posting-item-last_modified_by" type="text" name="last_modified_by" />
                 </AvGroup>
                 <AvGroup>
                   <Label id="descriptionLabel" for="posting-item-description">
@@ -153,14 +143,7 @@ export class PostingItemUpdate extends React.Component<IPostingItemUpdateProps, 
                   <Label id="pickUpTimeLabel" for="posting-item-pickUpTime">
                     Pick Up Time
                   </Label>
-                  <AvField
-                    id="posting-item-pickUpTime"
-                    type="text"
-                    name="pickUpTime"
-                    validate={{
-                      required: { value: true, errorMessage: 'This field is required.' }
-                    }}
-                  />
+                  <AvField id="posting-item-pickUpTime" type="text" name="pickUpTime" />
                 </AvGroup>
                 <AvGroup>
                   <Label id="startDateLabel" for="posting-item-startDate">

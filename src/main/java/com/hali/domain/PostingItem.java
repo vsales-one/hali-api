@@ -31,19 +31,16 @@ public class PostingItem implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @NotNull
-    @Column(name = "last_modified_date", nullable = false)
+    @Column(name = "last_modified_date")
     private Instant last_modified_date;
 
-    @NotNull
-    @Column(name = "last_modified_by", nullable = false)
+    @Column(name = "last_modified_by")
     private String last_modified_by;
 
     @Column(name = "description")
     private String description;
 
-    @NotNull
-    @Column(name = "pick_up_time", nullable = false)
+    @Column(name = "pick_up_time")
     private String pickUpTime;
 
     @NotNull
