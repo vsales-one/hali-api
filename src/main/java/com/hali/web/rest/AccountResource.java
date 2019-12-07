@@ -9,6 +9,7 @@ import com.hali.service.UserService;
 import com.hali.service.dto.PasswordChangeDTO;
 import com.hali.service.dto.UserDTO;
 import com.hali.web.rest.errors.*;
+import com.hali.web.rest.vm.FirebaseUser;
 import com.hali.web.rest.vm.KeyAndPasswordVM;
 import com.hali.web.rest.vm.ManagedUserVM;
 
@@ -48,6 +49,22 @@ public class AccountResource {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+    }
+
+    /**
+     * {@code POST  /register} : register the user.
+     *
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
+     */
+    @PostMapping("/registerFirebaseAccount")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerFirebaseAccount(@Valid @RequestBody FirebaseUser firebaseUser) {
+
+        User user = userService.registerFirebaseUser(firebaseUser.getFirstName(), firebaseUser.getUuid(), firebaseUser.getUsername());
+
+        mailService.sendActivationEmail(user);
     }
 
     /**

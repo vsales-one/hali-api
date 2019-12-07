@@ -139,6 +139,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/registerFirebaseAccount").permitAll()
                 .antMatchers("/api/activate").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/account/reset-password/init").permitAll()
@@ -170,6 +171,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/registerFirebaseAccount").permitAll()
                 .antMatchers("/api/activate").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/account/reset-password/init").permitAll()
@@ -187,7 +189,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:on
     }
 
-    private JWTConfigurer securityConfigurerAdapter() {
+    private JWTConfigurer  securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }
 

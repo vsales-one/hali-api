@@ -29,7 +29,8 @@ public class FirebaseFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String xAuth = request.getHeader(HEADER_NAME);
         if (StringUtil.isBlank(xAuth)) {
-            throw new FirebaseTokenException(FirebaseTokenExceptionMessages.TOKEN_HEADER_NOT_FOUND);
+            filterChain.doFilter(request, response);
+            return;
         } else {
             FirebaseTokenHolder holder = firebaseService.parseToken(xAuth);
             Authentication auth = new FirebaseAuthenticationToken(holder.getUid(), holder);

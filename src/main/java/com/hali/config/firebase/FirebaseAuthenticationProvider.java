@@ -2,6 +2,7 @@ package com.hali.config.firebase;
 
 import com.hali.domain.User;
 import com.hali.service.UserService;
+import com.hali.service.UserServiceExtension;
 import com.hali.service.exception.FirebaseUserNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,9 +26,6 @@ public class FirebaseAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsService userService;
 
-//    @Autowired
-//    private  UserService userService;
-
 	public boolean supports(Class<?> authentication) {
 		return (FirebaseAuthenticationToken.class.isAssignableFrom(authentication));
 	}
@@ -37,9 +35,9 @@ public class FirebaseAuthenticationProvider implements AuthenticationProvider {
 			return null;
 		}
 		FirebaseAuthenticationToken authenticationToken = (FirebaseAuthenticationToken) authentication;
-//        User details= userService.loadUserByUID(((FirebaseTokenHolder)authenticationToken.getCredentials()).getUid()).orElse(null);
+//        User details= userServiceExtension.loadUserByUID(((FirebaseTokenHolder)authenticationToken.getCredentials()).getUid()).orElse(null);
 //		if (details == null) {
-//                details=userService.registerFirebaseUser(
+//                details=userServiceExtension.registerFirebaseUser(
 //                    ((FirebaseTokenHolder)authenticationToken.getCredentials()).getName(),
 //                    ((FirebaseTokenHolder)authenticationToken.getCredentials()).getUid(),
 //                    ((FirebaseTokenHolder)authenticationToken.getCredentials()).getEmail());
