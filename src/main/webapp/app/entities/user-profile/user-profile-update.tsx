@@ -128,6 +128,24 @@ export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, 
                   </Label>
                   <AvField id="user-profile-phoneNumber" type="text" name="phoneNumber" />
                 </AvGroup>
+                <AvGroup>
+                  <Label id="latitudeLabel" for="user-profile-latitude">
+                    Latitude
+                  </Label>
+                  <AvField id="user-profile-latitude" type="text" name="latitude" />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="longitudeLabel" for="user-profile-longitude">
+                    Longitude
+                  </Label>
+                  <AvField id="user-profile-longitude" type="text" name="longitude" />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="displayNameLabel" for="user-profile-displayName">
+                    Display Name
+                  </Label>
+                  <AvField id="user-profile-displayName" type="text" name="displayName" />
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/user-profile" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;

@@ -52,6 +52,18 @@ export class UserProfileDetail extends React.Component<IUserProfileDetailProps> 
               <span id="phoneNumber">Phone Number</span>
             </dt>
             <dd>{userProfileEntity.phoneNumber}</dd>
+            <dt>
+              <span id="latitude">Latitude</span>
+            </dt>
+            <dd>{userProfileEntity.latitude}</dd>
+            <dt>
+              <span id="longitude">Longitude</span>
+            </dt>
+            <dd>{userProfileEntity.longitude}</dd>
+            <dt>
+              <span id="displayName">Display Name</span>
+            </dt>
+            <dd>{userProfileEntity.displayName}</dd>
           </dl>
           <Button tag={Link} to="/entity/user-profile" replace color="info">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * A UserProfile.
@@ -39,6 +40,15 @@ public class UserProfile implements Serializable {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "latitude", precision = 21, scale = 2)
+    private BigDecimal latitude;
+
+    @Column(name = "longitude", precision = 21, scale = 2)
+    private BigDecimal longitude;
+
+    @Column(name = "display_name")
+    private String displayName;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -126,6 +136,45 @@ public class UserProfile implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public UserProfile latitude(BigDecimal latitude) {
+        this.latitude = latitude;
+        return this;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public UserProfile longitude(BigDecimal longitude) {
+        this.longitude = longitude;
+        return this;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public UserProfile displayName(String displayName) {
+        this.displayName = displayName;
+        return this;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -154,6 +203,9 @@ public class UserProfile implements Serializable {
             ", address='" + getAddress() + "'" +
             ", district='" + getDistrict() + "'" +
             ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", latitude=" + getLatitude() +
+            ", longitude=" + getLongitude() +
+            ", displayName='" + getDisplayName() + "'" +
             "}";
     }
 }

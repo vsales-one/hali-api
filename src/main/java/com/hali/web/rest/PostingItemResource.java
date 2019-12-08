@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,6 +26,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +66,7 @@ public class PostingItemResource {
         if (postingItemDTO.getId() != null) {
             throw new BadRequestAlertException("A new postingItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        postingItemDTO.setLastModifiedDate(Instant.now());
         PostingItemDTO result = postingItemService.save(postingItemDTO);
         return ResponseEntity.created(new URI("/api/posting-items/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -84,6 +88,7 @@ public class PostingItemResource {
         if (postingItemDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        postingItemDTO.setLastModifiedDate(Instant.now());
         PostingItemDTO result = postingItemService.save(postingItemDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, postingItemDTO.getId().toString()))
@@ -99,8 +104,9 @@ public class PostingItemResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of postingItems in body.
      */
+
     @GetMapping("/posting-items")
-    public ResponseEntity<List<PostingItemDTO>> getAllPostingItems(PostingItemCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<PostingItemDTO>> getAllPostingItems(PostingItemCriteria criteria, @PageableDefault(sort = {"lastModifiedDate"}, direction = Sort.Direction.DESC)  Pageable pageable) {
         log.debug("REST request to get PostingItems by criteria: {}", criteria);
         Page<PostingItemDTO> page = postingItemQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

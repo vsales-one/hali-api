@@ -4,6 +4,8 @@ import com.hali.domain.UserProfile;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 /**
  * Spring Data  repository for the UserProfile entity.
@@ -12,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long>, JpaSpecificationExecutor<UserProfile> {
 
+    Optional<UserProfile> findUserProfileByUserId(String userId);
 }

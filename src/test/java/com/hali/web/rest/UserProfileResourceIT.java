@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.hali.web.rest.TestUtil.createFormattingConversionService;
@@ -55,6 +56,17 @@ public class UserProfileResourceIT {
 
     private static final String DEFAULT_PHONE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PHONE_NUMBER = "BBBBBBBBBB";
+
+    private static final BigDecimal DEFAULT_LATITUDE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_LATITUDE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_LATITUDE = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_LONGITUDE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_LONGITUDE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_LONGITUDE = new BigDecimal(1 - 1);
+
+    private static final String DEFAULT_DISPLAY_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_DISPLAY_NAME = "BBBBBBBBBB";
 
     @Autowired
     private UserProfileRepository userProfileRepository;
@@ -112,7 +124,10 @@ public class UserProfileResourceIT {
             .city(DEFAULT_CITY)
             .address(DEFAULT_ADDRESS)
             .district(DEFAULT_DISTRICT)
-            .phoneNumber(DEFAULT_PHONE_NUMBER);
+            .phoneNumber(DEFAULT_PHONE_NUMBER)
+            .latitude(DEFAULT_LATITUDE)
+            .longitude(DEFAULT_LONGITUDE)
+            .displayName(DEFAULT_DISPLAY_NAME);
         return userProfile;
     }
     /**
@@ -128,7 +143,10 @@ public class UserProfileResourceIT {
             .city(UPDATED_CITY)
             .address(UPDATED_ADDRESS)
             .district(UPDATED_DISTRICT)
-            .phoneNumber(UPDATED_PHONE_NUMBER);
+            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .latitude(UPDATED_LATITUDE)
+            .longitude(UPDATED_LONGITUDE)
+            .displayName(UPDATED_DISPLAY_NAME);
         return userProfile;
     }
 
@@ -159,6 +177,9 @@ public class UserProfileResourceIT {
         assertThat(testUserProfile.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testUserProfile.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
         assertThat(testUserProfile.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
+        assertThat(testUserProfile.getLatitude()).isEqualTo(DEFAULT_LATITUDE);
+        assertThat(testUserProfile.getLongitude()).isEqualTo(DEFAULT_LONGITUDE);
+        assertThat(testUserProfile.getDisplayName()).isEqualTo(DEFAULT_DISPLAY_NAME);
     }
 
     @Test
@@ -217,7 +238,10 @@ public class UserProfileResourceIT {
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())))
-            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())));
+            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].displayName").value(hasItem(DEFAULT_DISPLAY_NAME.toString())));
     }
     
     @Test
@@ -236,7 +260,10 @@ public class UserProfileResourceIT {
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS.toString()))
             .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT.toString()))
-            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()));
+            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()))
+            .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.intValue()))
+            .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE.intValue()))
+            .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME.toString()));
     }
 
     @Test
@@ -472,6 +499,229 @@ public class UserProfileResourceIT {
         // Get all the userProfileList where phoneNumber is null
         defaultUserProfileShouldNotBeFound("phoneNumber.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude equals to DEFAULT_LATITUDE
+        defaultUserProfileShouldBeFound("latitude.equals=" + DEFAULT_LATITUDE);
+
+        // Get all the userProfileList where latitude equals to UPDATED_LATITUDE
+        defaultUserProfileShouldNotBeFound("latitude.equals=" + UPDATED_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsInShouldWork() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude in DEFAULT_LATITUDE or UPDATED_LATITUDE
+        defaultUserProfileShouldBeFound("latitude.in=" + DEFAULT_LATITUDE + "," + UPDATED_LATITUDE);
+
+        // Get all the userProfileList where latitude equals to UPDATED_LATITUDE
+        defaultUserProfileShouldNotBeFound("latitude.in=" + UPDATED_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude is not null
+        defaultUserProfileShouldBeFound("latitude.specified=true");
+
+        // Get all the userProfileList where latitude is null
+        defaultUserProfileShouldNotBeFound("latitude.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude is greater than or equal to DEFAULT_LATITUDE
+        defaultUserProfileShouldBeFound("latitude.greaterThanOrEqual=" + DEFAULT_LATITUDE);
+
+        // Get all the userProfileList where latitude is greater than or equal to UPDATED_LATITUDE
+        defaultUserProfileShouldNotBeFound("latitude.greaterThanOrEqual=" + UPDATED_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude is less than or equal to DEFAULT_LATITUDE
+        defaultUserProfileShouldBeFound("latitude.lessThanOrEqual=" + DEFAULT_LATITUDE);
+
+        // Get all the userProfileList where latitude is less than or equal to SMALLER_LATITUDE
+        defaultUserProfileShouldNotBeFound("latitude.lessThanOrEqual=" + SMALLER_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude is less than DEFAULT_LATITUDE
+        defaultUserProfileShouldNotBeFound("latitude.lessThan=" + DEFAULT_LATITUDE);
+
+        // Get all the userProfileList where latitude is less than UPDATED_LATITUDE
+        defaultUserProfileShouldBeFound("latitude.lessThan=" + UPDATED_LATITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLatitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where latitude is greater than DEFAULT_LATITUDE
+        defaultUserProfileShouldNotBeFound("latitude.greaterThan=" + DEFAULT_LATITUDE);
+
+        // Get all the userProfileList where latitude is greater than SMALLER_LATITUDE
+        defaultUserProfileShouldBeFound("latitude.greaterThan=" + SMALLER_LATITUDE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude equals to DEFAULT_LONGITUDE
+        defaultUserProfileShouldBeFound("longitude.equals=" + DEFAULT_LONGITUDE);
+
+        // Get all the userProfileList where longitude equals to UPDATED_LONGITUDE
+        defaultUserProfileShouldNotBeFound("longitude.equals=" + UPDATED_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsInShouldWork() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude in DEFAULT_LONGITUDE or UPDATED_LONGITUDE
+        defaultUserProfileShouldBeFound("longitude.in=" + DEFAULT_LONGITUDE + "," + UPDATED_LONGITUDE);
+
+        // Get all the userProfileList where longitude equals to UPDATED_LONGITUDE
+        defaultUserProfileShouldNotBeFound("longitude.in=" + UPDATED_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude is not null
+        defaultUserProfileShouldBeFound("longitude.specified=true");
+
+        // Get all the userProfileList where longitude is null
+        defaultUserProfileShouldNotBeFound("longitude.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude is greater than or equal to DEFAULT_LONGITUDE
+        defaultUserProfileShouldBeFound("longitude.greaterThanOrEqual=" + DEFAULT_LONGITUDE);
+
+        // Get all the userProfileList where longitude is greater than or equal to UPDATED_LONGITUDE
+        defaultUserProfileShouldNotBeFound("longitude.greaterThanOrEqual=" + UPDATED_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude is less than or equal to DEFAULT_LONGITUDE
+        defaultUserProfileShouldBeFound("longitude.lessThanOrEqual=" + DEFAULT_LONGITUDE);
+
+        // Get all the userProfileList where longitude is less than or equal to SMALLER_LONGITUDE
+        defaultUserProfileShouldNotBeFound("longitude.lessThanOrEqual=" + SMALLER_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude is less than DEFAULT_LONGITUDE
+        defaultUserProfileShouldNotBeFound("longitude.lessThan=" + DEFAULT_LONGITUDE);
+
+        // Get all the userProfileList where longitude is less than UPDATED_LONGITUDE
+        defaultUserProfileShouldBeFound("longitude.lessThan=" + UPDATED_LONGITUDE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByLongitudeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where longitude is greater than DEFAULT_LONGITUDE
+        defaultUserProfileShouldNotBeFound("longitude.greaterThan=" + DEFAULT_LONGITUDE);
+
+        // Get all the userProfileList where longitude is greater than SMALLER_LONGITUDE
+        defaultUserProfileShouldBeFound("longitude.greaterThan=" + SMALLER_LONGITUDE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByDisplayNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where displayName equals to DEFAULT_DISPLAY_NAME
+        defaultUserProfileShouldBeFound("displayName.equals=" + DEFAULT_DISPLAY_NAME);
+
+        // Get all the userProfileList where displayName equals to UPDATED_DISPLAY_NAME
+        defaultUserProfileShouldNotBeFound("displayName.equals=" + UPDATED_DISPLAY_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByDisplayNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where displayName in DEFAULT_DISPLAY_NAME or UPDATED_DISPLAY_NAME
+        defaultUserProfileShouldBeFound("displayName.in=" + DEFAULT_DISPLAY_NAME + "," + UPDATED_DISPLAY_NAME);
+
+        // Get all the userProfileList where displayName equals to UPDATED_DISPLAY_NAME
+        defaultUserProfileShouldNotBeFound("displayName.in=" + UPDATED_DISPLAY_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByDisplayNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where displayName is not null
+        defaultUserProfileShouldBeFound("displayName.specified=true");
+
+        // Get all the userProfileList where displayName is null
+        defaultUserProfileShouldNotBeFound("displayName.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -485,7 +735,10 @@ public class UserProfileResourceIT {
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT)))
-            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)));
+            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)))
+            .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
+            .andExpect(jsonPath("$.[*].displayName").value(hasItem(DEFAULT_DISPLAY_NAME)));
 
         // Check, that the count call also returns 1
         restUserProfileMockMvc.perform(get("/api/user-profiles/count?sort=id,desc&" + filter))
@@ -538,7 +791,10 @@ public class UserProfileResourceIT {
             .city(UPDATED_CITY)
             .address(UPDATED_ADDRESS)
             .district(UPDATED_DISTRICT)
-            .phoneNumber(UPDATED_PHONE_NUMBER);
+            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .latitude(UPDATED_LATITUDE)
+            .longitude(UPDATED_LONGITUDE)
+            .displayName(UPDATED_DISPLAY_NAME);
         UserProfileDTO userProfileDTO = userProfileMapper.toDto(updatedUserProfile);
 
         restUserProfileMockMvc.perform(put("/api/user-profiles")
@@ -556,6 +812,9 @@ public class UserProfileResourceIT {
         assertThat(testUserProfile.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testUserProfile.getDistrict()).isEqualTo(UPDATED_DISTRICT);
         assertThat(testUserProfile.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
+        assertThat(testUserProfile.getLatitude()).isEqualTo(UPDATED_LATITUDE);
+        assertThat(testUserProfile.getLongitude()).isEqualTo(UPDATED_LONGITUDE);
+        assertThat(testUserProfile.getDisplayName()).isEqualTo(UPDATED_DISPLAY_NAME);
     }
 
     @Test

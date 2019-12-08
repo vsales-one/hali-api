@@ -48,13 +48,6 @@ public class PostingItemResourceIT {
     private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
     private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
 
-    private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-    private static final Instant SMALLER_LAST_MODIFIED_DATE = Instant.ofEpochMilli(-1L);
-
-    private static final String DEFAULT_LAST_MODIFIED_BY = "AAAAAAAAAA";
-    private static final String UPDATED_LAST_MODIFIED_BY = "BBBBBBBBBB";
-
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -85,6 +78,16 @@ public class PostingItemResourceIT {
 
     private static final String DEFAULT_DISTRICT = "AAAAAAAAAA";
     private static final String UPDATED_DISTRICT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_LAST_MODIFIED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_LAST_MODIFIED_BY = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant SMALLER_LAST_MODIFIED_DATE = Instant.ofEpochMilli(-1L);
+
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
     @Autowired
     private PostingItemRepository postingItemRepository;
@@ -139,8 +142,6 @@ public class PostingItemResourceIT {
         PostingItem postingItem = new PostingItem()
             .title(DEFAULT_TITLE)
             .imageUrl(DEFAULT_IMAGE_URL)
-            .last_modified_date(DEFAULT_LAST_MODIFIED_DATE)
-            .last_modified_by(DEFAULT_LAST_MODIFIED_BY)
             .description(DEFAULT_DESCRIPTION)
             .pickUpTime(DEFAULT_PICK_UP_TIME)
             .startDate(DEFAULT_START_DATE)
@@ -149,7 +150,10 @@ public class PostingItemResourceIT {
             .latitude(DEFAULT_LATITUDE)
             .longitude(DEFAULT_LONGITUDE)
             .city(DEFAULT_CITY)
-            .district(DEFAULT_DISTRICT);
+            .district(DEFAULT_DISTRICT)
+            .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
+            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
+            .status(DEFAULT_STATUS);
         // Add required entity
         Category category;
         if (TestUtil.findAll(em, Category.class).isEmpty()) {
@@ -172,8 +176,6 @@ public class PostingItemResourceIT {
         PostingItem postingItem = new PostingItem()
             .title(UPDATED_TITLE)
             .imageUrl(UPDATED_IMAGE_URL)
-            .last_modified_date(UPDATED_LAST_MODIFIED_DATE)
-            .last_modified_by(UPDATED_LAST_MODIFIED_BY)
             .description(UPDATED_DESCRIPTION)
             .pickUpTime(UPDATED_PICK_UP_TIME)
             .startDate(UPDATED_START_DATE)
@@ -182,7 +184,10 @@ public class PostingItemResourceIT {
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
             .city(UPDATED_CITY)
-            .district(UPDATED_DISTRICT);
+            .district(UPDATED_DISTRICT)
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .status(UPDATED_STATUS);
         // Add required entity
         Category category;
         if (TestUtil.findAll(em, Category.class).isEmpty()) {
@@ -219,8 +224,6 @@ public class PostingItemResourceIT {
         PostingItem testPostingItem = postingItemList.get(postingItemList.size() - 1);
         assertThat(testPostingItem.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testPostingItem.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
-        assertThat(testPostingItem.getLast_modified_date()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
-        assertThat(testPostingItem.getLast_modified_by()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testPostingItem.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPostingItem.getPickUpTime()).isEqualTo(DEFAULT_PICK_UP_TIME);
         assertThat(testPostingItem.getStartDate()).isEqualTo(DEFAULT_START_DATE);
@@ -230,6 +233,9 @@ public class PostingItemResourceIT {
         assertThat(testPostingItem.getLongitude()).isEqualTo(DEFAULT_LONGITUDE);
         assertThat(testPostingItem.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testPostingItem.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
+        assertThat(testPostingItem.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
+        assertThat(testPostingItem.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testPostingItem.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -259,44 +265,6 @@ public class PostingItemResourceIT {
         int databaseSizeBeforeTest = postingItemRepository.findAll().size();
         // set the field null
         postingItem.setTitle(null);
-
-        // Create the PostingItem, which fails.
-        PostingItemDTO postingItemDTO = postingItemMapper.toDto(postingItem);
-
-        restPostingItemMockMvc.perform(post("/api/posting-items")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(postingItemDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<PostingItem> postingItemList = postingItemRepository.findAll();
-        assertThat(postingItemList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkLast_modified_dateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = postingItemRepository.findAll().size();
-        // set the field null
-        postingItem.setLast_modified_date(null);
-
-        // Create the PostingItem, which fails.
-        PostingItemDTO postingItemDTO = postingItemMapper.toDto(postingItem);
-
-        restPostingItemMockMvc.perform(post("/api/posting-items")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(postingItemDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<PostingItem> postingItemList = postingItemRepository.findAll();
-        assertThat(postingItemList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkLast_modified_byIsRequired() throws Exception {
-        int databaseSizeBeforeTest = postingItemRepository.findAll().size();
-        // set the field null
-        postingItem.setLast_modified_by(null);
 
         // Create the PostingItem, which fails.
         PostingItemDTO postingItemDTO = postingItemMapper.toDto(postingItem);
@@ -399,8 +367,6 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(postingItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL.toString())))
-            .andExpect(jsonPath("$.[*].last_modified_date").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
-            .andExpect(jsonPath("$.[*].last_modified_by").value(hasItem(DEFAULT_LAST_MODIFIED_BY.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].pickUpTime").value(hasItem(DEFAULT_PICK_UP_TIME.toString())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
@@ -409,7 +375,10 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
-            .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())));
+            .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())))
+            .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY.toString())))
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
     @Test
@@ -425,8 +394,6 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.id").value(postingItem.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL.toString()))
-            .andExpect(jsonPath("$.last_modified_date").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
-            .andExpect(jsonPath("$.last_modified_by").value(DEFAULT_LAST_MODIFIED_BY.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.pickUpTime").value(DEFAULT_PICK_UP_TIME.toString()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
@@ -435,7 +402,10 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.latitude").value(DEFAULT_LATITUDE.intValue()))
             .andExpect(jsonPath("$.longitude").value(DEFAULT_LONGITUDE.intValue()))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
-            .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT.toString()));
+            .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT.toString()))
+            .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY.toString()))
+            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
     @Test
@@ -514,84 +484,6 @@ public class PostingItemResourceIT {
 
         // Get all the postingItemList where imageUrl is null
         defaultPostingItemShouldNotBeFound("imageUrl.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllPostingItemsByLast_modified_dateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        postingItemRepository.saveAndFlush(postingItem);
-
-        // Get all the postingItemList where last_modified_date equals to DEFAULT_LAST_MODIFIED_DATE
-        defaultPostingItemShouldBeFound("last_modified_date.equals=" + DEFAULT_LAST_MODIFIED_DATE);
-
-        // Get all the postingItemList where last_modified_date equals to UPDATED_LAST_MODIFIED_DATE
-        defaultPostingItemShouldNotBeFound("last_modified_date.equals=" + UPDATED_LAST_MODIFIED_DATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPostingItemsByLast_modified_dateIsInShouldWork() throws Exception {
-        // Initialize the database
-        postingItemRepository.saveAndFlush(postingItem);
-
-        // Get all the postingItemList where last_modified_date in DEFAULT_LAST_MODIFIED_DATE or UPDATED_LAST_MODIFIED_DATE
-        defaultPostingItemShouldBeFound("last_modified_date.in=" + DEFAULT_LAST_MODIFIED_DATE + "," + UPDATED_LAST_MODIFIED_DATE);
-
-        // Get all the postingItemList where last_modified_date equals to UPDATED_LAST_MODIFIED_DATE
-        defaultPostingItemShouldNotBeFound("last_modified_date.in=" + UPDATED_LAST_MODIFIED_DATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPostingItemsByLast_modified_dateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        postingItemRepository.saveAndFlush(postingItem);
-
-        // Get all the postingItemList where last_modified_date is not null
-        defaultPostingItemShouldBeFound("last_modified_date.specified=true");
-
-        // Get all the postingItemList where last_modified_date is null
-        defaultPostingItemShouldNotBeFound("last_modified_date.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllPostingItemsByLast_modified_byIsEqualToSomething() throws Exception {
-        // Initialize the database
-        postingItemRepository.saveAndFlush(postingItem);
-
-        // Get all the postingItemList where last_modified_by equals to DEFAULT_LAST_MODIFIED_BY
-        defaultPostingItemShouldBeFound("last_modified_by.equals=" + DEFAULT_LAST_MODIFIED_BY);
-
-        // Get all the postingItemList where last_modified_by equals to UPDATED_LAST_MODIFIED_BY
-        defaultPostingItemShouldNotBeFound("last_modified_by.equals=" + UPDATED_LAST_MODIFIED_BY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPostingItemsByLast_modified_byIsInShouldWork() throws Exception {
-        // Initialize the database
-        postingItemRepository.saveAndFlush(postingItem);
-
-        // Get all the postingItemList where last_modified_by in DEFAULT_LAST_MODIFIED_BY or UPDATED_LAST_MODIFIED_BY
-        defaultPostingItemShouldBeFound("last_modified_by.in=" + DEFAULT_LAST_MODIFIED_BY + "," + UPDATED_LAST_MODIFIED_BY);
-
-        // Get all the postingItemList where last_modified_by equals to UPDATED_LAST_MODIFIED_BY
-        defaultPostingItemShouldNotBeFound("last_modified_by.in=" + UPDATED_LAST_MODIFIED_BY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPostingItemsByLast_modified_byIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        postingItemRepository.saveAndFlush(postingItem);
-
-        // Get all the postingItemList where last_modified_by is not null
-        defaultPostingItemShouldBeFound("last_modified_by.specified=true");
-
-        // Get all the postingItemList where last_modified_by is null
-        defaultPostingItemShouldNotBeFound("last_modified_by.specified=false");
     }
 
     @Test
@@ -1053,6 +945,123 @@ public class PostingItemResourceIT {
 
     @Test
     @Transactional
+    public void getAllPostingItemsByLastModifiedByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where lastModifiedBy equals to DEFAULT_LAST_MODIFIED_BY
+        defaultPostingItemShouldBeFound("lastModifiedBy.equals=" + DEFAULT_LAST_MODIFIED_BY);
+
+        // Get all the postingItemList where lastModifiedBy equals to UPDATED_LAST_MODIFIED_BY
+        defaultPostingItemShouldNotBeFound("lastModifiedBy.equals=" + UPDATED_LAST_MODIFIED_BY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByLastModifiedByIsInShouldWork() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where lastModifiedBy in DEFAULT_LAST_MODIFIED_BY or UPDATED_LAST_MODIFIED_BY
+        defaultPostingItemShouldBeFound("lastModifiedBy.in=" + DEFAULT_LAST_MODIFIED_BY + "," + UPDATED_LAST_MODIFIED_BY);
+
+        // Get all the postingItemList where lastModifiedBy equals to UPDATED_LAST_MODIFIED_BY
+        defaultPostingItemShouldNotBeFound("lastModifiedBy.in=" + UPDATED_LAST_MODIFIED_BY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByLastModifiedByIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where lastModifiedBy is not null
+        defaultPostingItemShouldBeFound("lastModifiedBy.specified=true");
+
+        // Get all the postingItemList where lastModifiedBy is null
+        defaultPostingItemShouldNotBeFound("lastModifiedBy.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByLastModifiedDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where lastModifiedDate equals to DEFAULT_LAST_MODIFIED_DATE
+        defaultPostingItemShouldBeFound("lastModifiedDate.equals=" + DEFAULT_LAST_MODIFIED_DATE);
+
+        // Get all the postingItemList where lastModifiedDate equals to UPDATED_LAST_MODIFIED_DATE
+        defaultPostingItemShouldNotBeFound("lastModifiedDate.equals=" + UPDATED_LAST_MODIFIED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByLastModifiedDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where lastModifiedDate in DEFAULT_LAST_MODIFIED_DATE or UPDATED_LAST_MODIFIED_DATE
+        defaultPostingItemShouldBeFound("lastModifiedDate.in=" + DEFAULT_LAST_MODIFIED_DATE + "," + UPDATED_LAST_MODIFIED_DATE);
+
+        // Get all the postingItemList where lastModifiedDate equals to UPDATED_LAST_MODIFIED_DATE
+        defaultPostingItemShouldNotBeFound("lastModifiedDate.in=" + UPDATED_LAST_MODIFIED_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByLastModifiedDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where lastModifiedDate is not null
+        defaultPostingItemShouldBeFound("lastModifiedDate.specified=true");
+
+        // Get all the postingItemList where lastModifiedDate is null
+        defaultPostingItemShouldNotBeFound("lastModifiedDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where status equals to DEFAULT_STATUS
+        defaultPostingItemShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the postingItemList where status equals to UPDATED_STATUS
+        defaultPostingItemShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultPostingItemShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the postingItemList where status equals to UPDATED_STATUS
+        defaultPostingItemShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+
+        // Get all the postingItemList where status is not null
+        defaultPostingItemShouldBeFound("status.specified=true");
+
+        // Get all the postingItemList where status is null
+        defaultPostingItemShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllPostingItemsByCategoryIsEqualToSomething() throws Exception {
         // Get already existing entity
         Category category = postingItem.getCategory();
@@ -1076,8 +1085,6 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(postingItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)))
-            .andExpect(jsonPath("$.[*].last_modified_date").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
-            .andExpect(jsonPath("$.[*].last_modified_by").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].pickUpTime").value(hasItem(DEFAULT_PICK_UP_TIME)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
@@ -1086,7 +1093,10 @@ public class PostingItemResourceIT {
             .andExpect(jsonPath("$.[*].latitude").value(hasItem(DEFAULT_LATITUDE.intValue())))
             .andExpect(jsonPath("$.[*].longitude").value(hasItem(DEFAULT_LONGITUDE.intValue())))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
-            .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT)));
+            .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT)))
+            .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
 
         // Check, that the count call also returns 1
         restPostingItemMockMvc.perform(get("/api/posting-items/count?sort=id,desc&" + filter))
@@ -1136,8 +1146,6 @@ public class PostingItemResourceIT {
         updatedPostingItem
             .title(UPDATED_TITLE)
             .imageUrl(UPDATED_IMAGE_URL)
-            .last_modified_date(UPDATED_LAST_MODIFIED_DATE)
-            .last_modified_by(UPDATED_LAST_MODIFIED_BY)
             .description(UPDATED_DESCRIPTION)
             .pickUpTime(UPDATED_PICK_UP_TIME)
             .startDate(UPDATED_START_DATE)
@@ -1146,7 +1154,10 @@ public class PostingItemResourceIT {
             .latitude(UPDATED_LATITUDE)
             .longitude(UPDATED_LONGITUDE)
             .city(UPDATED_CITY)
-            .district(UPDATED_DISTRICT);
+            .district(UPDATED_DISTRICT)
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .status(UPDATED_STATUS);
         PostingItemDTO postingItemDTO = postingItemMapper.toDto(updatedPostingItem);
 
         restPostingItemMockMvc.perform(put("/api/posting-items")
@@ -1160,8 +1171,6 @@ public class PostingItemResourceIT {
         PostingItem testPostingItem = postingItemList.get(postingItemList.size() - 1);
         assertThat(testPostingItem.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testPostingItem.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
-        assertThat(testPostingItem.getLast_modified_date()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
-        assertThat(testPostingItem.getLast_modified_by()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testPostingItem.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPostingItem.getPickUpTime()).isEqualTo(UPDATED_PICK_UP_TIME);
         assertThat(testPostingItem.getStartDate()).isEqualTo(UPDATED_START_DATE);
@@ -1171,6 +1180,9 @@ public class PostingItemResourceIT {
         assertThat(testPostingItem.getLongitude()).isEqualTo(UPDATED_LONGITUDE);
         assertThat(testPostingItem.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testPostingItem.getDistrict()).isEqualTo(UPDATED_DISTRICT);
+        assertThat(testPostingItem.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testPostingItem.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testPostingItem.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

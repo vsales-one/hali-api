@@ -32,10 +32,6 @@ public class PostingItemCriteria implements Serializable, Criteria {
 
     private StringFilter imageUrl;
 
-    private InstantFilter last_modified_date;
-
-    private StringFilter last_modified_by;
-
     private StringFilter description;
 
     private StringFilter pickUpTime;
@@ -54,6 +50,12 @@ public class PostingItemCriteria implements Serializable, Criteria {
 
     private StringFilter district;
 
+    private StringFilter lastModifiedBy;
+
+    private InstantFilter lastModifiedDate;
+
+    private StringFilter status;
+
     private LongFilter categoryId;
 
     public PostingItemCriteria(){
@@ -63,8 +65,6 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.title = other.title == null ? null : other.title.copy();
         this.imageUrl = other.imageUrl == null ? null : other.imageUrl.copy();
-        this.last_modified_date = other.last_modified_date == null ? null : other.last_modified_date.copy();
-        this.last_modified_by = other.last_modified_by == null ? null : other.last_modified_by.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.pickUpTime = other.pickUpTime == null ? null : other.pickUpTime.copy();
         this.startDate = other.startDate == null ? null : other.startDate.copy();
@@ -74,6 +74,9 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.longitude = other.longitude == null ? null : other.longitude.copy();
         this.city = other.city == null ? null : other.city.copy();
         this.district = other.district == null ? null : other.district.copy();
+        this.lastModifiedBy = other.lastModifiedBy == null ? null : other.lastModifiedBy.copy();
+        this.lastModifiedDate = other.lastModifiedDate == null ? null : other.lastModifiedDate.copy();
+        this.status = other.status == null ? null : other.status.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
     }
 
@@ -104,22 +107,6 @@ public class PostingItemCriteria implements Serializable, Criteria {
 
     public void setImageUrl(StringFilter imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public InstantFilter getLast_modified_date() {
-        return last_modified_date;
-    }
-
-    public void setLast_modified_date(InstantFilter last_modified_date) {
-        this.last_modified_date = last_modified_date;
-    }
-
-    public StringFilter getLast_modified_by() {
-        return last_modified_by;
-    }
-
-    public void setLast_modified_by(StringFilter last_modified_by) {
-        this.last_modified_by = last_modified_by;
     }
 
     public StringFilter getDescription() {
@@ -194,6 +181,30 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.district = district;
     }
 
+    public StringFilter getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(StringFilter lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public InstantFilter getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(InstantFilter lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public StringFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(StringFilter status) {
+        this.status = status;
+    }
+
     public LongFilter getCategoryId() {
         return categoryId;
     }
@@ -216,8 +227,6 @@ public class PostingItemCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(title, that.title) &&
             Objects.equals(imageUrl, that.imageUrl) &&
-            Objects.equals(last_modified_date, that.last_modified_date) &&
-            Objects.equals(last_modified_by, that.last_modified_by) &&
             Objects.equals(description, that.description) &&
             Objects.equals(pickUpTime, that.pickUpTime) &&
             Objects.equals(startDate, that.startDate) &&
@@ -227,6 +236,9 @@ public class PostingItemCriteria implements Serializable, Criteria {
             Objects.equals(longitude, that.longitude) &&
             Objects.equals(city, that.city) &&
             Objects.equals(district, that.district) &&
+            Objects.equals(lastModifiedBy, that.lastModifiedBy) &&
+            Objects.equals(lastModifiedDate, that.lastModifiedDate) &&
+            Objects.equals(status, that.status) &&
             Objects.equals(categoryId, that.categoryId);
     }
 
@@ -236,8 +248,6 @@ public class PostingItemCriteria implements Serializable, Criteria {
         id,
         title,
         imageUrl,
-        last_modified_date,
-        last_modified_by,
         description,
         pickUpTime,
         startDate,
@@ -247,6 +257,9 @@ public class PostingItemCriteria implements Serializable, Criteria {
         longitude,
         city,
         district,
+        lastModifiedBy,
+        lastModifiedDate,
+        status,
         categoryId
         );
     }
@@ -257,8 +270,6 @@ public class PostingItemCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (title != null ? "title=" + title + ", " : "") +
                 (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "") +
-                (last_modified_date != null ? "last_modified_date=" + last_modified_date + ", " : "") +
-                (last_modified_by != null ? "last_modified_by=" + last_modified_by + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (pickUpTime != null ? "pickUpTime=" + pickUpTime + ", " : "") +
                 (startDate != null ? "startDate=" + startDate + ", " : "") +
@@ -268,6 +279,9 @@ public class PostingItemCriteria implements Serializable, Criteria {
                 (longitude != null ? "longitude=" + longitude + ", " : "") +
                 (city != null ? "city=" + city + ", " : "") +
                 (district != null ? "district=" + district + ", " : "") +
+                (lastModifiedBy != null ? "lastModifiedBy=" + lastModifiedBy + ", " : "") +
+                (lastModifiedDate != null ? "lastModifiedDate=" + lastModifiedDate + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
                 (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
             "}";
     }

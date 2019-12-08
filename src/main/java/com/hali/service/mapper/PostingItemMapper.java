@@ -13,6 +13,8 @@ public interface PostingItemMapper extends EntityMapper<PostingItemDTO, PostingI
 
     @Mapping(source = "category.id", target = "categoryId")
     @Mapping(source = "category.categoryName", target = "categoryCategoryName")
+    @Mapping(source = "userProfile.displayName", target = "userProfileDisplayName")
+    @Mapping(source = "userProfile.imageUrl", target = "userProfileImageUrl")
     PostingItemDTO toDto(PostingItem postingItem);
 
     @Mapping(source = "categoryId", target = "category")

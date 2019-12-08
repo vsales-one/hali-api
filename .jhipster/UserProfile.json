@@ -30,6 +30,18 @@
         {
             "fieldName": "phoneNumber",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "latitude",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "longitude",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "displayName",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20191126153831",

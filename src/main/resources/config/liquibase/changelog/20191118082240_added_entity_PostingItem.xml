@@ -24,14 +24,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="last_modified_date" type="datetime">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="last_modified_by" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -68,6 +60,18 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="last_modified_by" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="last_modified_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="category_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -75,9 +79,9 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
-        <dropDefaultValue tableName="posting_item" columnName="last_modified_date" columnDataType="datetime"/>
         <dropDefaultValue tableName="posting_item" columnName="start_date" columnDataType="datetime"/>
         <dropDefaultValue tableName="posting_item" columnName="end_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="posting_item" columnName="last_modified_date" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20191118082240-1-relations" author="jhipster">
@@ -101,8 +105,6 @@
             <column name="id" type="numeric"/>
             <column name="title" type="string"/>
             <column name="image_url" type="string"/>
-            <column name="last_modified_date" type="datetime"/>
-            <column name="last_modified_by" type="string"/>
             <column name="description" type="string"/>
             <column name="pick_up_time" type="string"/>
             <column name="start_date" type="datetime"/>
@@ -112,6 +114,9 @@
             <column name="longitude" type="numeric"/>
             <column name="city" type="string"/>
             <column name="district" type="string"/>
+            <column name="last_modified_by" type="string"/>
+            <column name="last_modified_date" type="datetime"/>
+            <column name="status" type="string"/>
             <column name="category_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

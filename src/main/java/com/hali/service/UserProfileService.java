@@ -43,4 +43,6 @@ public interface UserProfileService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    UserProfileDTO updateByUserId(String userId, UserProfileDTO userProfileDTO);
 }

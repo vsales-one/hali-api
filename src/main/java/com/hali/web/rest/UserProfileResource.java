@@ -69,6 +69,15 @@ public class UserProfileResource {
             .body(result);
     }
 
+    @PostMapping("/user-profiles/{userId}/update-by-user-id")
+    public ResponseEntity<UserProfileDTO> updateByUserId(@PathVariable String userId,  @RequestBody UserProfileDTO userProfileDTO) throws URISyntaxException {
+        log.debug("REST request to save UserProfile : {}", userProfileDTO);
+        UserProfileDTO result = userProfileService.updateByUserId(userId, userProfileDTO);
+        return ResponseEntity.created(new URI("/api/user-profiles/" + result.getUserId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
     /**
      * {@code PUT  /user-profiles} : Updates an existing userProfile.
      *

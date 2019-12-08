@@ -1,6 +1,7 @@
 package com.hali.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -22,6 +23,12 @@ public class UserProfileDTO implements Serializable {
     private String district;
 
     private String phoneNumber;
+
+    private BigDecimal latitude;
+
+    private BigDecimal longitude;
+
+    private String displayName;
 
 
     public Long getId() {
@@ -80,6 +87,30 @@ public class UserProfileDTO implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -111,6 +142,9 @@ public class UserProfileDTO implements Serializable {
             ", address='" + getAddress() + "'" +
             ", district='" + getDistrict() + "'" +
             ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", latitude=" + getLatitude() +
+            ", longitude=" + getLongitude() +
+            ", displayName='" + getDisplayName() + "'" +
             "}";
     }
 }

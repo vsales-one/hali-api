@@ -73,12 +73,6 @@ export class PostingItem extends React.Component<IPostingItemProps, IPostingItem
                   <th className="hand" onClick={this.sort('imageUrl')}>
                     Image Url <FontAwesomeIcon icon="sort" />
                   </th>
-                  <th className="hand" onClick={this.sort('last_modified_date')}>
-                    Last Modified Date <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={this.sort('last_modified_by')}>
-                    Last Modified By <FontAwesomeIcon icon="sort" />
-                  </th>
                   <th className="hand" onClick={this.sort('description')}>
                     Description <FontAwesomeIcon icon="sort" />
                   </th>
@@ -106,6 +100,15 @@ export class PostingItem extends React.Component<IPostingItemProps, IPostingItem
                   <th className="hand" onClick={this.sort('district')}>
                     District <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={this.sort('lastModifiedBy')}>
+                    Last Modified By <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={this.sort('lastModifiedDate')}>
+                    Last Modified Date <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={this.sort('status')}>
+                    Status <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th>
                     Category <FontAwesomeIcon icon="sort" />
                   </th>
@@ -122,10 +125,6 @@ export class PostingItem extends React.Component<IPostingItemProps, IPostingItem
                     </td>
                     <td>{postingItem.title}</td>
                     <td>{postingItem.imageUrl}</td>
-                    <td>
-                      <TextFormat type="date" value={postingItem.last_modified_date} format={APP_DATE_FORMAT} />
-                    </td>
-                    <td>{postingItem.last_modified_by}</td>
                     <td>{postingItem.description}</td>
                     <td>{postingItem.pickUpTime}</td>
                     <td>
@@ -139,6 +138,11 @@ export class PostingItem extends React.Component<IPostingItemProps, IPostingItem
                     <td>{postingItem.longitude}</td>
                     <td>{postingItem.city}</td>
                     <td>{postingItem.district}</td>
+                    <td>{postingItem.lastModifiedBy}</td>
+                    <td>
+                      <TextFormat type="date" value={postingItem.lastModifiedDate} format={APP_DATE_FORMAT} />
+                    </td>
+                    <td>{postingItem.status}</td>
                     <td>
                       {postingItem.categoryCategoryName ? (
                         <Link to={`category/${postingItem.categoryId}`}>{postingItem.categoryCategoryName}</Link>

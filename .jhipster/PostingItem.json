@@ -26,20 +26,6 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "last_modified_date",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "last_modified_by",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "description",
             "fieldType": "String"
         },
@@ -85,6 +71,18 @@
         },
         {
             "fieldName": "district",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastModifiedBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastModifiedDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "status",
             "fieldType": "String"
         }
     ],

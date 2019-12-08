@@ -6,6 +6,9 @@ export interface IUserProfile {
   address?: string;
   district?: string;
   phoneNumber?: string;
+  latitude?: number;
+  longitude?: number;
+  displayName?: string;
 }
 
 export const defaultValue: Readonly<IUserProfile> = {};

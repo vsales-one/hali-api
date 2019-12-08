@@ -85,6 +85,15 @@ export class UserProfile extends React.Component<IUserProfileProps, IUserProfile
                   <th className="hand" onClick={this.sort('phoneNumber')}>
                     Phone Number <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={this.sort('latitude')}>
+                    Latitude <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={this.sort('longitude')}>
+                    Longitude <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th className="hand" onClick={this.sort('displayName')}>
+                    Display Name <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th />
                 </tr>
               </thead>
@@ -102,6 +111,9 @@ export class UserProfile extends React.Component<IUserProfileProps, IUserProfile
                     <td>{userProfile.address}</td>
                     <td>{userProfile.district}</td>
                     <td>{userProfile.phoneNumber}</td>
+                    <td>{userProfile.latitude}</td>
+                    <td>{userProfile.longitude}</td>
+                    <td>{userProfile.displayName}</td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${userProfile.id}`} color="info" size="sm">

@@ -33,11 +33,31 @@ public class PostingItem implements Serializable {
 
     @NotNull
     @Column(name = "last_modified_date", nullable = false)
-    private Instant last_modified_date;
+    private Instant lastModifiedDate;
+
+    @Column(name = "status")
+    private String status;
+
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 
     @NotNull
     @Column(name = "last_modified_by", nullable = false)
-    private String last_modified_by;
+    private String lastModifiedBy;
 
     @Column(name = "description")
     private String description;
@@ -75,6 +95,19 @@ public class PostingItem implements Serializable {
     @JsonIgnoreProperties("postingItems")
     private Category category;
 
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @NotNull
+    @JoinColumn(name="last_modified_by", nullable=false,referencedColumnName = "user_id", insertable =  false, updatable = false)
+    private UserProfile userProfile;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -110,31 +143,7 @@ public class PostingItem implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public Instant getLast_modified_date() {
-        return last_modified_date;
-    }
 
-    public PostingItem last_modified_date(Instant last_modified_date) {
-        this.last_modified_date = last_modified_date;
-        return this;
-    }
-
-    public void setLast_modified_date(Instant last_modified_date) {
-        this.last_modified_date = last_modified_date;
-    }
-
-    public String getLast_modified_by() {
-        return last_modified_by;
-    }
-
-    public PostingItem last_modified_by(String last_modified_by) {
-        this.last_modified_by = last_modified_by;
-        return this;
-    }
-
-    public void setLast_modified_by(String last_modified_by) {
-        this.last_modified_by = last_modified_by;
-    }
 
     public String getDescription() {
         return description;
@@ -249,6 +258,16 @@ public class PostingItem implements Serializable {
         return this;
     }
 
+    public PostingItem lastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+        return this;
+    }
+
+    public PostingItem lastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+        return this;
+    }
+
     public void setDistrict(String district) {
         this.district = district;
     }
@@ -278,6 +297,20 @@ public class PostingItem implements Serializable {
         return id != null && id.equals(((PostingItem) o).id);
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public PostingItem status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
     @Override
     public int hashCode() {
         return 31;
@@ -289,8 +322,6 @@ public class PostingItem implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
-            ", last_modified_date='" + getLast_modified_date() + "'" +
-            ", last_modified_by='" + getLast_modified_by() + "'" +
             ", description='" + getDescription() + "'" +
             ", pickUpTime='" + getPickUpTime() + "'" +
             ", startDate='" + getStartDate() + "'" +

@@ -84,7 +84,7 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
      * Function to convert ConsumerCriteria to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<UserProfile> createSpecification(UserProfileCriteria criteria) {
         Specification<UserProfile> specification = Specification.where(null);
         if (criteria != null) {
@@ -109,6 +109,16 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
             if (criteria.getPhoneNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhoneNumber(), UserProfile_.phoneNumber));
             }
+            if (criteria.getLatitude() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLatitude(), UserProfile_.latitude));
+            }
+            if (criteria.getLongitude() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLongitude(), UserProfile_.longitude));
+            }
+            if (criteria.getDisplayName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDisplayName(), UserProfile_.displayName));
+            }
+
         }
         return specification;
     }

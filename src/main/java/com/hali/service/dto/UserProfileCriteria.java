@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 
 /**
  * Criteria class for the {@link com.hali.domain.UserProfile} entity. This class is used
@@ -38,6 +39,12 @@ public class UserProfileCriteria implements Serializable, Criteria {
 
     private StringFilter phoneNumber;
 
+    private BigDecimalFilter latitude;
+
+    private BigDecimalFilter longitude;
+
+    private StringFilter displayName;
+
     public UserProfileCriteria(){
     }
 
@@ -49,6 +56,9 @@ public class UserProfileCriteria implements Serializable, Criteria {
         this.address = other.address == null ? null : other.address.copy();
         this.district = other.district == null ? null : other.district.copy();
         this.phoneNumber = other.phoneNumber == null ? null : other.phoneNumber.copy();
+        this.latitude = other.latitude == null ? null : other.latitude.copy();
+        this.longitude = other.longitude == null ? null : other.longitude.copy();
+        this.displayName = other.displayName == null ? null : other.displayName.copy();
     }
 
     @Override
@@ -112,6 +122,30 @@ public class UserProfileCriteria implements Serializable, Criteria {
         this.phoneNumber = phoneNumber;
     }
 
+    public BigDecimalFilter getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimalFilter latitude) {
+        this.latitude = latitude;
+    }
+
+    public BigDecimalFilter getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimalFilter longitude) {
+        this.longitude = longitude;
+    }
+
+    public StringFilter getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(StringFilter displayName) {
+        this.displayName = displayName;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -129,7 +163,10 @@ public class UserProfileCriteria implements Serializable, Criteria {
             Objects.equals(city, that.city) &&
             Objects.equals(address, that.address) &&
             Objects.equals(district, that.district) &&
-            Objects.equals(phoneNumber, that.phoneNumber);
+            Objects.equals(phoneNumber, that.phoneNumber) &&
+            Objects.equals(latitude, that.latitude) &&
+            Objects.equals(longitude, that.longitude) &&
+            Objects.equals(displayName, that.displayName);
     }
 
     @Override
@@ -141,7 +178,10 @@ public class UserProfileCriteria implements Serializable, Criteria {
         city,
         address,
         district,
-        phoneNumber
+        phoneNumber,
+        latitude,
+        longitude,
+        displayName
         );
     }
 
@@ -155,6 +195,9 @@ public class UserProfileCriteria implements Serializable, Criteria {
                 (address != null ? "address=" + address + ", " : "") +
                 (district != null ? "district=" + district + ", " : "") +
                 (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "") +
+                (latitude != null ? "latitude=" + latitude + ", " : "") +
+                (longitude != null ? "longitude=" + longitude + ", " : "") +
+                (displayName != null ? "displayName=" + displayName + ", " : "") +
             "}";
     }
 

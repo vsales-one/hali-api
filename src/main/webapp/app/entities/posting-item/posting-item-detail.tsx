@@ -37,16 +37,6 @@ export class PostingItemDetail extends React.Component<IPostingItemDetailProps> 
             </dt>
             <dd>{postingItemEntity.imageUrl}</dd>
             <dt>
-              <span id="last_modified_date">Last Modified Date</span>
-            </dt>
-            <dd>
-              <TextFormat value={postingItemEntity.last_modified_date} type="date" format={APP_DATE_FORMAT} />
-            </dd>
-            <dt>
-              <span id="last_modified_by">Last Modified By</span>
-            </dt>
-            <dd>{postingItemEntity.last_modified_by}</dd>
-            <dt>
               <span id="description">Description</span>
             </dt>
             <dd>{postingItemEntity.description}</dd>
@@ -86,6 +76,20 @@ export class PostingItemDetail extends React.Component<IPostingItemDetailProps> 
               <span id="district">District</span>
             </dt>
             <dd>{postingItemEntity.district}</dd>
+            <dt>
+              <span id="lastModifiedBy">Last Modified By</span>
+            </dt>
+            <dd>{postingItemEntity.lastModifiedBy}</dd>
+            <dt>
+              <span id="lastModifiedDate">Last Modified Date</span>
+            </dt>
+            <dd>
+              <TextFormat value={postingItemEntity.lastModifiedDate} type="date" format={APP_DATE_FORMAT} />
+            </dd>
+            <dt>
+              <span id="status">Status</span>
+            </dt>
+            <dd>{postingItemEntity.status}</dd>
             <dt>Category</dt>
             <dd>{postingItemEntity.categoryCategoryName ? postingItemEntity.categoryCategoryName : ''}</dd>
           </dl>

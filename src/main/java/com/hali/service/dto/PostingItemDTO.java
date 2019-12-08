@@ -17,11 +17,29 @@ public class PostingItemDTO implements Serializable {
 
     private String imageUrl;
 
-    @NotNull
-    private Instant last_modified_date;
+    private String status;
+
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    private Instant lastModifiedDate;
 
     @NotNull
-    private String last_modified_by;
+    private String lastModifiedBy;
 
     private String description;
 
@@ -44,6 +62,26 @@ public class PostingItemDTO implements Serializable {
     private String city;
 
     private String district;
+
+    public String getUserProfileDisplayName() {
+        return userProfileDisplayName;
+    }
+
+    public void setUserProfileDisplayName(String userProfileDisplayName) {
+        this.userProfileDisplayName = userProfileDisplayName;
+    }
+
+    public String getUserProfileImageUrl() {
+        return userProfileImageUrl;
+    }
+
+    public void setUserProfileImageUrl(String userProfileImageUrl) {
+        this.userProfileImageUrl = userProfileImageUrl;
+    }
+
+    private String userProfileDisplayName;
+
+    private String userProfileImageUrl;
 
 
     private Long categoryId;
@@ -72,22 +110,6 @@ public class PostingItemDTO implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Instant getLast_modified_date() {
-        return last_modified_date;
-    }
-
-    public void setLast_modified_date(Instant last_modified_date) {
-        this.last_modified_date = last_modified_date;
-    }
-
-    public String getLast_modified_by() {
-        return last_modified_by;
-    }
-
-    public void setLast_modified_by(String last_modified_by) {
-        this.last_modified_by = last_modified_by;
     }
 
     public String getDescription() {
@@ -194,6 +216,15 @@ public class PostingItemDTO implements Serializable {
         return Objects.equals(getId(), postingItemDTO.getId());
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
@@ -205,8 +236,6 @@ public class PostingItemDTO implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
-            ", last_modified_date='" + getLast_modified_date() + "'" +
-            ", last_modified_by='" + getLast_modified_by() + "'" +
             ", description='" + getDescription() + "'" +
             ", pickUpTime='" + getPickUpTime() + "'" +
             ", startDate='" + getStartDate() + "'" +

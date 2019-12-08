@@ -49,9 +49,9 @@ export class PostingItemUpdate extends React.Component<IPostingItemUpdateProps, 
   }
 
   saveEntity = (event, errors, values) => {
-    values.last_modified_date = convertDateTimeToServer(values.last_modified_date);
     values.startDate = convertDateTimeToServer(values.startDate);
     values.endDate = convertDateTimeToServer(values.endDate);
+    values.lastModifiedDate = convertDateTimeToServer(values.lastModifiedDate);
 
     if (errors.length === 0) {
       const { postingItemEntity } = this.props;
@@ -113,35 +113,6 @@ export class PostingItemUpdate extends React.Component<IPostingItemUpdateProps, 
                     Image Url
                   </Label>
                   <AvField id="posting-item-imageUrl" type="text" name="imageUrl" />
-                </AvGroup>
-                <AvGroup>
-                  <Label id="last_modified_dateLabel" for="posting-item-last_modified_date">
-                    Last Modified Date
-                  </Label>
-                  <AvInput
-                    id="posting-item-last_modified_date"
-                    type="datetime-local"
-                    className="form-control"
-                    name="last_modified_date"
-                    placeholder={'YYYY-MM-DD HH:mm'}
-                    value={isNew ? null : convertDateTimeFromServer(this.props.postingItemEntity.last_modified_date)}
-                    validate={{
-                      required: { value: true, errorMessage: 'This field is required.' }
-                    }}
-                  />
-                </AvGroup>
-                <AvGroup>
-                  <Label id="last_modified_byLabel" for="posting-item-last_modified_by">
-                    Last Modified By
-                  </Label>
-                  <AvField
-                    id="posting-item-last_modified_by"
-                    type="text"
-                    name="last_modified_by"
-                    validate={{
-                      required: { value: true, errorMessage: 'This field is required.' }
-                    }}
-                  />
                 </AvGroup>
                 <AvGroup>
                   <Label id="descriptionLabel" for="posting-item-description">
@@ -230,6 +201,31 @@ export class PostingItemUpdate extends React.Component<IPostingItemUpdateProps, 
                     District
                   </Label>
                   <AvField id="posting-item-district" type="text" name="district" />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="lastModifiedByLabel" for="posting-item-lastModifiedBy">
+                    Last Modified By
+                  </Label>
+                  <AvField id="posting-item-lastModifiedBy" type="text" name="lastModifiedBy" />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="lastModifiedDateLabel" for="posting-item-lastModifiedDate">
+                    Last Modified Date
+                  </Label>
+                  <AvInput
+                    id="posting-item-lastModifiedDate"
+                    type="datetime-local"
+                    className="form-control"
+                    name="lastModifiedDate"
+                    placeholder={'YYYY-MM-DD HH:mm'}
+                    value={isNew ? null : convertDateTimeFromServer(this.props.postingItemEntity.lastModifiedDate)}
+                  />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="statusLabel" for="posting-item-status">
+                    Status
+                  </Label>
+                  <AvField id="posting-item-status" type="text" name="status" />
                 </AvGroup>
                 <AvGroup>
                   <Label for="posting-item-category">Category</Label>

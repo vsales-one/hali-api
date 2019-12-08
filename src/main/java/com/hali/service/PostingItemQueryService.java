@@ -97,12 +97,6 @@ public class PostingItemQueryService extends QueryService<PostingItem> {
             if (criteria.getImageUrl() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getImageUrl(), PostingItem_.imageUrl));
             }
-            if (criteria.getLast_modified_date() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getLast_modified_date(), PostingItem_.last_modified_date));
-            }
-            if (criteria.getLast_modified_by() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLast_modified_by(), PostingItem_.last_modified_by));
-            }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), PostingItem_.description));
             }
@@ -129,6 +123,15 @@ public class PostingItemQueryService extends QueryService<PostingItem> {
             }
             if (criteria.getDistrict() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDistrict(), PostingItem_.district));
+            }
+            if (criteria.getLastModifiedBy() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLastModifiedBy(), PostingItem_.lastModifiedBy));
+            }
+            if (criteria.getLastModifiedDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLastModifiedDate(), PostingItem_.lastModifiedDate));
+            }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getStatus(), PostingItem_.status));
             }
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCategoryId(),
