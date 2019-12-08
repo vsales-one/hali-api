@@ -3,6 +3,7 @@ package com.hali.web.rest;
 import com.hali.HaliApp;
 import com.hali.domain.PostingItem;
 import com.hali.domain.Category;
+import com.hali.domain.PostFavorite;
 import com.hali.repository.PostingItemRepository;
 import com.hali.service.PostingItemService;
 import com.hali.service.dto.PostingItemDTO;
@@ -1007,6 +1008,26 @@ public class PostingItemResourceIT {
 
         // Get all the postingItemList where category equals to categoryId + 1
         defaultPostingItemShouldNotBeFound("categoryId.equals=" + (categoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPostingItemsByPostFavoriteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        postingItemRepository.saveAndFlush(postingItem);
+        PostFavorite postFavorite = PostFavoriteResourceIT.createEntity(em);
+        em.persist(postFavorite);
+        em.flush();
+        postingItem.addPostFavorite(postFavorite);
+        postingItemRepository.saveAndFlush(postingItem);
+        Long postFavoriteId = postFavorite.getId();
+
+        // Get all the postingItemList where postFavorite equals to postFavoriteId
+        defaultPostingItemShouldBeFound("postFavoriteId.equals=" + postFavoriteId);
+
+        // Get all the postingItemList where postFavorite equals to postFavoriteId + 1
+        defaultPostingItemShouldNotBeFound("postFavoriteId.equals=" + (postFavoriteId + 1));
     }
 
     /**

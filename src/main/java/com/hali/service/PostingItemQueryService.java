@@ -134,6 +134,10 @@ public class PostingItemQueryService extends QueryService<PostingItem> {
                 specification = specification.and(buildSpecification(criteria.getCategoryId(),
                     root -> root.join(PostingItem_.category, JoinType.LEFT).get(Category_.id)));
             }
+            if (criteria.getPostFavoriteId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPostFavoriteId(),
+                    root -> root.join(PostingItem_.postFavorites, JoinType.LEFT).get(PostFavorite_.id)));
+            }
         }
         return specification;
     }

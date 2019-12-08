@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A UserProfile.
@@ -39,6 +41,10 @@ public class UserProfile implements Serializable {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "userProfile")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<PostFavorite> postFavorites = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -125,6 +131,31 @@ public class UserProfile implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Set<PostFavorite> getPostFavorites() {
+        return postFavorites;
+    }
+
+    public UserProfile postFavorites(Set<PostFavorite> postFavorites) {
+        this.postFavorites = postFavorites;
+        return this;
+    }
+
+    public UserProfile addPostFavorite(PostFavorite postFavorite) {
+        this.postFavorites.add(postFavorite);
+        postFavorite.setUserProfile(this);
+        return this;
+    }
+
+    public UserProfile removePostFavorite(PostFavorite postFavorite) {
+        this.postFavorites.remove(postFavorite);
+        postFavorite.setUserProfile(null);
+        return this;
+    }
+
+    public void setPostFavorites(Set<PostFavorite> postFavorites) {
+        this.postFavorites = postFavorites;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

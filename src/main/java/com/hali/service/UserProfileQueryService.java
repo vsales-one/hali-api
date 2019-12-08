@@ -109,6 +109,10 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
             if (criteria.getPhoneNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhoneNumber(), UserProfile_.phoneNumber));
             }
+            if (criteria.getPostFavoriteId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPostFavoriteId(),
+                    root -> root.join(UserProfile_.postFavorites, JoinType.LEFT).get(PostFavorite_.id)));
+            }
         }
         return specification;
     }

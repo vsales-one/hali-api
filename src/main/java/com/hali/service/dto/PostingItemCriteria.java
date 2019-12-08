@@ -56,6 +56,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
 
     private LongFilter categoryId;
 
+    private LongFilter postFavoriteId;
+
     public PostingItemCriteria(){
     }
 
@@ -75,6 +77,7 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.city = other.city == null ? null : other.city.copy();
         this.district = other.district == null ? null : other.district.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
+        this.postFavoriteId = other.postFavoriteId == null ? null : other.postFavoriteId.copy();
     }
 
     @Override
@@ -202,6 +205,14 @@ public class PostingItemCriteria implements Serializable, Criteria {
         this.categoryId = categoryId;
     }
 
+    public LongFilter getPostFavoriteId() {
+        return postFavoriteId;
+    }
+
+    public void setPostFavoriteId(LongFilter postFavoriteId) {
+        this.postFavoriteId = postFavoriteId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -227,7 +238,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
             Objects.equals(longitude, that.longitude) &&
             Objects.equals(city, that.city) &&
             Objects.equals(district, that.district) &&
-            Objects.equals(categoryId, that.categoryId);
+            Objects.equals(categoryId, that.categoryId) &&
+            Objects.equals(postFavoriteId, that.postFavoriteId);
     }
 
     @Override
@@ -247,7 +259,8 @@ public class PostingItemCriteria implements Serializable, Criteria {
         longitude,
         city,
         district,
-        categoryId
+        categoryId,
+        postFavoriteId
         );
     }
 
@@ -269,6 +282,7 @@ public class PostingItemCriteria implements Serializable, Criteria {
                 (city != null ? "city=" + city + ", " : "") +
                 (district != null ? "district=" + district + ", " : "") +
                 (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
+                (postFavoriteId != null ? "postFavoriteId=" + postFavoriteId + ", " : "") +
             "}";
     }
 

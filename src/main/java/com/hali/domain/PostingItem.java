@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A PostingItem.
@@ -71,6 +73,10 @@ public class PostingItem implements Serializable {
     @NotNull
     @JsonIgnoreProperties("postingItems")
     private Category category;
+
+    @OneToMany(mappedBy = "postingItem")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<PostFavorite> postFavorites = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -261,6 +267,31 @@ public class PostingItem implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<PostFavorite> getPostFavorites() {
+        return postFavorites;
+    }
+
+    public PostingItem postFavorites(Set<PostFavorite> postFavorites) {
+        this.postFavorites = postFavorites;
+        return this;
+    }
+
+    public PostingItem addPostFavorite(PostFavorite postFavorite) {
+        this.postFavorites.add(postFavorite);
+        postFavorite.setPostingItem(this);
+        return this;
+    }
+
+    public PostingItem removePostFavorite(PostFavorite postFavorite) {
+        this.postFavorites.remove(postFavorite);
+        postFavorite.setPostingItem(null);
+        return this;
+    }
+
+    public void setPostFavorites(Set<PostFavorite> postFavorites) {
+        this.postFavorites = postFavorites;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

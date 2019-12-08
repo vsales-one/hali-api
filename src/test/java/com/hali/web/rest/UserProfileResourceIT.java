@@ -2,6 +2,7 @@ package com.hali.web.rest;
 
 import com.hali.HaliApp;
 import com.hali.domain.UserProfile;
+import com.hali.domain.PostFavorite;
 import com.hali.repository.UserProfileRepository;
 import com.hali.service.UserProfileService;
 import com.hali.service.dto.UserProfileDTO;
@@ -472,6 +473,26 @@ public class UserProfileResourceIT {
         // Get all the userProfileList where phoneNumber is null
         defaultUserProfileShouldNotBeFound("phoneNumber.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByPostFavoriteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+        PostFavorite postFavorite = PostFavoriteResourceIT.createEntity(em);
+        em.persist(postFavorite);
+        em.flush();
+        userProfile.addPostFavorite(postFavorite);
+        userProfileRepository.saveAndFlush(userProfile);
+        Long postFavoriteId = postFavorite.getId();
+
+        // Get all the userProfileList where postFavorite equals to postFavoriteId
+        defaultUserProfileShouldBeFound("postFavoriteId.equals=" + postFavoriteId);
+
+        // Get all the userProfileList where postFavorite equals to postFavoriteId + 1
+        defaultUserProfileShouldNotBeFound("postFavoriteId.equals=" + (postFavoriteId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */

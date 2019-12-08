@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { IPostFavorite } from 'app/shared/model/post-favorite.model';
 
 export interface IPostingItem {
   id?: number;
@@ -17,6 +18,7 @@ export interface IPostingItem {
   district?: string;
   categoryCategoryName?: string;
   categoryId?: number;
+  postFavorites?: IPostFavorite[];
 }
 
 export const defaultValue: Readonly<IPostingItem> = {};

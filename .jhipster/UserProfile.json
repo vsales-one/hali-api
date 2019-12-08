@@ -1,7 +1,14 @@
 {
     "fluentMethods": true,
     "clientRootFolder": "",
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "postFavorite",
+            "otherEntityName": "postFavorite",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "userProfile"
+        }
+    ],
     "fields": [
         {
             "fieldName": "userId",

@@ -11,6 +11,12 @@
             ],
             "otherEntityField": "categoryName",
             "otherEntityRelationshipName": "postingItem"
+        },
+        {
+            "relationshipName": "postFavorite",
+            "otherEntityName": "postFavorite",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "postingItem"
         }
     ],
     "fields": [

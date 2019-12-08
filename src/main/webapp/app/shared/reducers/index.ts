@@ -31,6 +31,10 @@ import postingItem, {
 import userProfile, {
   UserProfileState
 } from 'app/entities/user-profile/user-profile.reducer';
+// prettier-ignore
+import postFavorite, {
+  PostFavoriteState
+} from 'app/entities/post-favorite/post-favorite.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -48,6 +52,7 @@ export interface IRootState {
   readonly district: DistrictState;
   readonly postingItem: PostingItemState;
   readonly userProfile: UserProfileState;
+  readonly postFavorite: PostFavoriteState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -67,6 +72,7 @@ const rootReducer = combineReducers<IRootState>({
   district,
   postingItem,
   userProfile,
+  postFavorite,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

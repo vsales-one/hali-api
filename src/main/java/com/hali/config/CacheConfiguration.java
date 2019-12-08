@@ -48,6 +48,9 @@ public class CacheConfiguration {
             createCache(cm, com.hali.domain.District.class.getName());
             createCache(cm, com.hali.domain.PostingItem.class.getName());
             createCache(cm, com.hali.domain.UserProfile.class.getName());
+            createCache(cm, com.hali.domain.PostingItem.class.getName() + ".postFavorites");
+            createCache(cm, com.hali.domain.PostFavorite.class.getName());
+            createCache(cm, com.hali.domain.UserProfile.class.getName() + ".postFavorites");
             // jhipster-needle-ehcache-add-entry
         };
     }

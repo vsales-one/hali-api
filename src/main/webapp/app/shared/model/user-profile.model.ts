@@ -1,3 +1,5 @@
+import { IPostFavorite } from 'app/shared/model/post-favorite.model';
+
 export interface IUserProfile {
   id?: number;
   userId?: string;
@@ -6,6 +8,7 @@ export interface IUserProfile {
   address?: string;
   district?: string;
   phoneNumber?: string;
+  postFavorites?: IPostFavorite[];
 }
 
 export const defaultValue: Readonly<IUserProfile> = {};

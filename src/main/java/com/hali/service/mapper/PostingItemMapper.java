@@ -16,6 +16,8 @@ public interface PostingItemMapper extends EntityMapper<PostingItemDTO, PostingI
     PostingItemDTO toDto(PostingItem postingItem);
 
     @Mapping(source = "categoryId", target = "category")
+    @Mapping(target = "postFavorites", ignore = true)
+    @Mapping(target = "removePostFavorite", ignore = true)
     PostingItem toEntity(PostingItemDTO postingItemDTO);
 
     default PostingItem fromId(Long id) {

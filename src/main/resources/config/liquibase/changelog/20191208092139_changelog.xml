@@ -1,0 +1,55 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="trungvu (generated)" id="1575796947278-6">
+        <createTable tableName="post_favorite">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="post_favoritePK"/>
+            </column>
+            <column name="date_favorited" type="datetime"/>
+            <column name="posting_item_id" type="BIGINT"/>
+            <column name="user_profile_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-7">
+        <addColumn tableName="user_profile">
+            <column name="user_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-8">
+        <addUniqueConstraint columnNames="user_id" constraintName="UC_USER_PROFILEUSER_ID_COL" tableName="user_profile"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-9">
+        <addForeignKeyConstraint baseColumnNames="posting_item_id" baseTableName="post_favorite" constraintName="FKl7c56sylv0ar0u2bhjv6sxpy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="posting_item" validate="true"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-10">
+        <addForeignKeyConstraint baseColumnNames="user_profile_id" baseTableName="post_favorite" constraintName="FKpgr2s64a5ynwoht70fojwtqfv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user_profile" validate="true"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-11">
+        <dropForeignKeyConstraint baseTableName="user_profile" constraintName="fk_user_profile_user_id"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-12">
+        <dropColumn columnName="full_name" tableName="user_profile"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-1">
+        <dropUniqueConstraint constraintName="UC_CATEGORYCATEGORY_NAME_COL" tableName="category"/>
+        <addUniqueConstraint columnNames="category_name" constraintName="UC_CATEGORYCATEGORY_NAME_COL" tableName="category"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-2">
+        <dropUniqueConstraint constraintName="UC_CITYCITY_NAME_COL" tableName="city"/>
+        <addUniqueConstraint columnNames="city_name" constraintName="UC_CITYCITY_NAME_COL" tableName="city"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-3">
+        <dropUniqueConstraint constraintName="UC_DISTRICTDISTRICT_NAME_COL" tableName="district"/>
+        <addUniqueConstraint columnNames="district_name" constraintName="UC_DISTRICTDISTRICT_NAME_COL" tableName="district"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-4">
+        <dropUniqueConstraint constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575796947278-5">
+        <dropUniqueConstraint constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>

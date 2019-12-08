@@ -38,6 +38,8 @@ public class UserProfileCriteria implements Serializable, Criteria {
 
     private StringFilter phoneNumber;
 
+    private LongFilter postFavoriteId;
+
     public UserProfileCriteria(){
     }
 
@@ -49,6 +51,7 @@ public class UserProfileCriteria implements Serializable, Criteria {
         this.address = other.address == null ? null : other.address.copy();
         this.district = other.district == null ? null : other.district.copy();
         this.phoneNumber = other.phoneNumber == null ? null : other.phoneNumber.copy();
+        this.postFavoriteId = other.postFavoriteId == null ? null : other.postFavoriteId.copy();
     }
 
     @Override
@@ -112,6 +115,14 @@ public class UserProfileCriteria implements Serializable, Criteria {
         this.phoneNumber = phoneNumber;
     }
 
+    public LongFilter getPostFavoriteId() {
+        return postFavoriteId;
+    }
+
+    public void setPostFavoriteId(LongFilter postFavoriteId) {
+        this.postFavoriteId = postFavoriteId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -129,7 +140,8 @@ public class UserProfileCriteria implements Serializable, Criteria {
             Objects.equals(city, that.city) &&
             Objects.equals(address, that.address) &&
             Objects.equals(district, that.district) &&
-            Objects.equals(phoneNumber, that.phoneNumber);
+            Objects.equals(phoneNumber, that.phoneNumber) &&
+            Objects.equals(postFavoriteId, that.postFavoriteId);
     }
 
     @Override
@@ -141,7 +153,8 @@ public class UserProfileCriteria implements Serializable, Criteria {
         city,
         address,
         district,
-        phoneNumber
+        phoneNumber,
+        postFavoriteId
         );
     }
 
@@ -155,6 +168,7 @@ public class UserProfileCriteria implements Serializable, Criteria {
                 (address != null ? "address=" + address + ", " : "") +
                 (district != null ? "district=" + district + ", " : "") +
                 (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "") +
+                (postFavoriteId != null ? "postFavoriteId=" + postFavoriteId + ", " : "") +
             "}";
     }
 

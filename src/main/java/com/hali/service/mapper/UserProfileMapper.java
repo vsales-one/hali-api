@@ -12,6 +12,9 @@ import org.mapstruct.*;
 public interface UserProfileMapper extends EntityMapper<UserProfileDTO, UserProfile> {
 
 
+    @Mapping(target = "postFavorites", ignore = true)
+    @Mapping(target = "removePostFavorite", ignore = true)
+    UserProfile toEntity(UserProfileDTO userProfileDTO);
 
     default UserProfile fromId(Long id) {
         if (id == null) {
