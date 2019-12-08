@@ -67,9 +67,6 @@ export class UserProfile extends React.Component<IUserProfileProps, IUserProfile
                   <th className="hand" onClick={this.sort('id')}>
                     ID <FontAwesomeIcon icon="sort" />
                   </th>
-                  <th className="hand" onClick={this.sort('userId')}>
-                    User Id <FontAwesomeIcon icon="sort" />
-                  </th>
                   <th className="hand" onClick={this.sort('imageUrl')}>
                     Image Url <FontAwesomeIcon icon="sort" />
                   </th>
@@ -85,6 +82,12 @@ export class UserProfile extends React.Component<IUserProfileProps, IUserProfile
                   <th className="hand" onClick={this.sort('phoneNumber')}>
                     Phone Number <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={this.sort('fullName')}>
+                    Full Name <FontAwesomeIcon icon="sort" />
+                  </th>
+                  <th>
+                    User <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th />
                 </tr>
               </thead>
@@ -96,12 +99,13 @@ export class UserProfile extends React.Component<IUserProfileProps, IUserProfile
                         {userProfile.id}
                       </Button>
                     </td>
-                    <td>{userProfile.userId}</td>
                     <td>{userProfile.imageUrl}</td>
                     <td>{userProfile.city}</td>
                     <td>{userProfile.address}</td>
                     <td>{userProfile.district}</td>
                     <td>{userProfile.phoneNumber}</td>
+                    <td>{userProfile.fullName}</td>
+                    <td>{userProfile.userLogin ? userProfile.userLogin : ''}</td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${userProfile.id}`} color="info" size="sm">

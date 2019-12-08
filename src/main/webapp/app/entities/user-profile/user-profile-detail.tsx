@@ -29,10 +29,6 @@ export class UserProfileDetail extends React.Component<IUserProfileDetailProps> 
           </h2>
           <dl className="jh-entity-details">
             <dt>
-              <span id="userId">User Id</span>
-            </dt>
-            <dd>{userProfileEntity.userId}</dd>
-            <dt>
               <span id="imageUrl">Image Url</span>
             </dt>
             <dd>{userProfileEntity.imageUrl}</dd>
@@ -52,6 +48,12 @@ export class UserProfileDetail extends React.Component<IUserProfileDetailProps> 
               <span id="phoneNumber">Phone Number</span>
             </dt>
             <dd>{userProfileEntity.phoneNumber}</dd>
+            <dt>
+              <span id="fullName">Full Name</span>
+            </dt>
+            <dd>{userProfileEntity.fullName}</dd>
+            <dt>User</dt>
+            <dd>{userProfileEntity.userLogin ? userProfileEntity.userLogin : ''}</dd>
           </dl>
           <Button tag={Link} to="/entity/user-profile" replace color="info">
             <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

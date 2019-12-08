@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="trungvu (generated)" id="1575790724505-7">
+        <addColumn tableName="user_profile">
+            <column name="full_name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575790724505-1">
+        <dropUniqueConstraint constraintName="UC_CATEGORYCATEGORY_NAME_COL" tableName="category"/>
+        <addUniqueConstraint columnNames="category_name" constraintName="UC_CATEGORYCATEGORY_NAME_COL" tableName="category"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575790724505-2">
+        <dropUniqueConstraint constraintName="UC_CITYCITY_NAME_COL" tableName="city"/>
+        <addUniqueConstraint columnNames="city_name" constraintName="UC_CITYCITY_NAME_COL" tableName="city"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575790724505-3">
+        <dropUniqueConstraint constraintName="UC_DISTRICTDISTRICT_NAME_COL" tableName="district"/>
+        <addUniqueConstraint columnNames="district_name" constraintName="UC_DISTRICTDISTRICT_NAME_COL" tableName="district"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575790724505-4">
+        <dropUniqueConstraint constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575790724505-5">
+        <dropUniqueConstraint constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="trungvu (generated)" id="1575790724505-6">
+        <dropUniqueConstraint constraintName="UC_USER_PROFILEUSER_ID_COL" tableName="user_profile"/>
+        <addUniqueConstraint columnNames="user_id" constraintName="UC_USER_PROFILEUSER_ID_COL" tableName="user_profile"/>
+    </changeSet>
+</databaseChangeLog>

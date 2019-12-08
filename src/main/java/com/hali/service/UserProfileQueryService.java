@@ -91,9 +91,6 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildSpecification(criteria.getId(), UserProfile_.id));
             }
-            if (criteria.getUserId() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getUserId(), UserProfile_.userId));
-            }
             if (criteria.getImageUrl() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getImageUrl(), UserProfile_.imageUrl));
             }
@@ -108,6 +105,13 @@ public class UserProfileQueryService extends QueryService<UserProfile> {
             }
             if (criteria.getPhoneNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhoneNumber(), UserProfile_.phoneNumber));
+            }
+            if (criteria.getFullName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFullName(), UserProfile_.fullName));
+            }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserId(),
+                    root -> root.join(UserProfile_.user, JoinType.LEFT).get(User_.id)));
             }
         }
         return specification;

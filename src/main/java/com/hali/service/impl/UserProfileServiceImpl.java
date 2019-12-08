@@ -3,6 +3,7 @@ package com.hali.service.impl;
 import com.hali.service.UserProfileService;
 import com.hali.domain.UserProfile;
 import com.hali.repository.UserProfileRepository;
+import com.hali.repository.UserRepository;
 import com.hali.service.dto.UserProfileDTO;
 import com.hali.service.mapper.UserProfileMapper;
 import org.slf4j.Logger;
@@ -28,9 +29,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     private final UserProfileMapper userProfileMapper;
 
-    public UserProfileServiceImpl(UserProfileRepository userProfileRepository, UserProfileMapper userProfileMapper) {
+    private final UserRepository userRepository;
+
+    public UserProfileServiceImpl(UserProfileRepository userProfileRepository, UserProfileMapper userProfileMapper, UserRepository userRepository) {
         this.userProfileRepository = userProfileRepository;
         this.userProfileMapper = userProfileMapper;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -43,6 +47,8 @@ public class UserProfileServiceImpl implements UserProfileService {
     public UserProfileDTO save(UserProfileDTO userProfileDTO) {
         log.debug("Request to save UserProfile : {}", userProfileDTO);
         UserProfile userProfile = userProfileMapper.toEntity(userProfileDTO);
+        Long userId = userProfileDTO.getUserId();
+        userRepository.findById(userId).ifPresent(userProfile::user);
         userProfile = userProfileRepository.save(userProfile);
         return userProfileMapper.toDto(userProfile);
     }

@@ -8,6 +8,8 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipste
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './user-profile.reducer';
 import { IUserProfile } from 'app/shared/model/user-profile.model';
 // tslint:disable-next-line:no-unused-variable
@@ -18,12 +20,14 @@ export interface IUserProfileUpdateProps extends StateProps, DispatchProps, Rout
 
 export interface IUserProfileUpdateState {
   isNew: boolean;
+  userId: string;
 }
 
 export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, IUserProfileUpdateState> {
   constructor(props) {
     super(props);
     this.state = {
+      userId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +44,8 @@ export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, 
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getUsers();
   }
 
   saveEntity = (event, errors, values) => {
@@ -63,7 +69,7 @@ export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, 
   };
 
   render() {
-    const { userProfileEntity, loading, updating } = this.props;
+    const { userProfileEntity, users, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -85,19 +91,6 @@ export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, 
                     <AvInput id="user-profile-id" type="text" className="form-control" name="id" required readOnly />
                   </AvGroup>
                 ) : null}
-                <AvGroup>
-                  <Label id="userIdLabel" for="user-profile-userId">
-                    User Id
-                  </Label>
-                  <AvField
-                    id="user-profile-userId"
-                    type="text"
-                    name="userId"
-                    validate={{
-                      required: { value: true, errorMessage: 'This field is required.' }
-                    }}
-                  />
-                </AvGroup>
                 <AvGroup>
                   <Label id="imageUrlLabel" for="user-profile-imageUrl">
                     Image Url
@@ -128,6 +121,25 @@ export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, 
                   </Label>
                   <AvField id="user-profile-phoneNumber" type="text" name="phoneNumber" />
                 </AvGroup>
+                <AvGroup>
+                  <Label id="fullNameLabel" for="user-profile-fullName">
+                    Full Name
+                  </Label>
+                  <AvField id="user-profile-fullName" type="text" name="fullName" />
+                </AvGroup>
+                <AvGroup>
+                  <Label for="user-profile-user">User</Label>
+                  <AvInput id="user-profile-user" type="select" className="form-control" name="userId">
+                    <option value="" key="0" />
+                    {users
+                      ? users.map(otherEntity => (
+                          <option value={otherEntity.id} key={otherEntity.id}>
+                            {otherEntity.login}
+                          </option>
+                        ))
+                      : null}
+                  </AvInput>
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/user-profile" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
@@ -148,6 +160,7 @@ export class UserProfileUpdate extends React.Component<IUserProfileUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  users: storeState.userManagement.users,
   userProfileEntity: storeState.userProfile.entity,
   loading: storeState.userProfile.loading,
   updating: storeState.userProfile.updating,
@@ -155,6 +168,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUsers,
   getEntity,
   updateEntity,
   createEntity,

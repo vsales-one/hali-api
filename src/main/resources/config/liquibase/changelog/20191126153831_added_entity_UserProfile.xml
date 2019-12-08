@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="autoIncrement" value="true"/>
+    <property name="autoIncrement" value="false"/>
 
     <!--
         Added the entity UserProfile.
@@ -16,10 +16,6 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_user_profile_user_id" />
-            </column>
-
             <column name="image_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -37,6 +33,10 @@
             </column>
 
             <column name="phone_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="full_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -64,12 +64,12 @@
                   separator=";"
                   tableName="user_profile">
             <column name="id" type="numeric"/>
-            <column name="user_id" type="string"/>
             <column name="image_url" type="string"/>
             <column name="city" type="string"/>
             <column name="address" type="string"/>
             <column name="district" type="string"/>
             <column name="phone_number" type="string"/>
+            <column name="full_name" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

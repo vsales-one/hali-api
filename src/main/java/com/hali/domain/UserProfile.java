@@ -3,7 +3,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import java.io.Serializable;
 
@@ -18,12 +17,7 @@ public class UserProfile implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    @Column(name = "user_id", nullable = false, unique = true)
-    private String userId;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -40,6 +34,14 @@ public class UserProfile implements Serializable {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "full_name")
+    private String fullName;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -47,19 +49,6 @@ public class UserProfile implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public UserProfile userId(String userId) {
-        this.userId = userId;
-        return this;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getImageUrl() {
@@ -126,6 +115,32 @@ public class UserProfile implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public UserProfile fullName(String fullName) {
+        this.fullName = fullName;
+        return this;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public UserProfile user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -148,12 +163,12 @@ public class UserProfile implements Serializable {
     public String toString() {
         return "UserProfile{" +
             "id=" + getId() +
-            ", userId='" + getUserId() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
             ", city='" + getCity() + "'" +
             ", address='" + getAddress() + "'" +
             ", district='" + getDistrict() + "'" +
             ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", fullName='" + getFullName() + "'" +
             "}";
     }
 }

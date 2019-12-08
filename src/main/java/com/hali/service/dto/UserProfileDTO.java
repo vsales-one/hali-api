@@ -1,5 +1,4 @@
 package com.hali.service.dto;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,9 +8,6 @@ import java.util.Objects;
 public class UserProfileDTO implements Serializable {
 
     private Long id;
-
-    @NotNull
-    private String userId;
 
     private String imageUrl;
 
@@ -23,6 +19,12 @@ public class UserProfileDTO implements Serializable {
 
     private String phoneNumber;
 
+    private String fullName;
+
+
+    private Long userId;
+
+    private String userLogin;
 
     public Long getId() {
         return id;
@@ -30,14 +32,6 @@ public class UserProfileDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getImageUrl() {
@@ -80,6 +74,30 @@ public class UserProfileDTO implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -105,12 +123,14 @@ public class UserProfileDTO implements Serializable {
     public String toString() {
         return "UserProfileDTO{" +
             "id=" + getId() +
-            ", userId='" + getUserId() + "'" +
             ", imageUrl='" + getImageUrl() + "'" +
             ", city='" + getCity() + "'" +
             ", address='" + getAddress() + "'" +
             ", district='" + getDistrict() + "'" +
             ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", fullName='" + getFullName() + "'" +
+            ", user=" + getUserId() +
+            ", user='" + getUserLogin() + "'" +
             "}";
     }
 }

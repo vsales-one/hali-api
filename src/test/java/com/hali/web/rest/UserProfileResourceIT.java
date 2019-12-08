@@ -2,6 +2,7 @@ package com.hali.web.rest;
 
 import com.hali.HaliApp;
 import com.hali.domain.UserProfile;
+import com.hali.domain.User;
 import com.hali.repository.UserProfileRepository;
 import com.hali.service.UserProfileService;
 import com.hali.service.dto.UserProfileDTO;
@@ -38,9 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = HaliApp.class)
 public class UserProfileResourceIT {
 
-    private static final String DEFAULT_USER_ID = "AAAAAAAAAA";
-    private static final String UPDATED_USER_ID = "BBBBBBBBBB";
-
     private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
     private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
 
@@ -55,6 +53,9 @@ public class UserProfileResourceIT {
 
     private static final String DEFAULT_PHONE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PHONE_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FULL_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_FULL_NAME = "BBBBBBBBBB";
 
     @Autowired
     private UserProfileRepository userProfileRepository;
@@ -107,12 +108,17 @@ public class UserProfileResourceIT {
      */
     public static UserProfile createEntity(EntityManager em) {
         UserProfile userProfile = new UserProfile()
-            .userId(DEFAULT_USER_ID)
             .imageUrl(DEFAULT_IMAGE_URL)
             .city(DEFAULT_CITY)
             .address(DEFAULT_ADDRESS)
             .district(DEFAULT_DISTRICT)
-            .phoneNumber(DEFAULT_PHONE_NUMBER);
+            .phoneNumber(DEFAULT_PHONE_NUMBER)
+            .fullName(DEFAULT_FULL_NAME);
+        // Add required entity
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        userProfile.setUser(user);
         return userProfile;
     }
     /**
@@ -123,12 +129,17 @@ public class UserProfileResourceIT {
      */
     public static UserProfile createUpdatedEntity(EntityManager em) {
         UserProfile userProfile = new UserProfile()
-            .userId(UPDATED_USER_ID)
             .imageUrl(UPDATED_IMAGE_URL)
             .city(UPDATED_CITY)
             .address(UPDATED_ADDRESS)
             .district(UPDATED_DISTRICT)
-            .phoneNumber(UPDATED_PHONE_NUMBER);
+            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .fullName(UPDATED_FULL_NAME);
+        // Add required entity
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        userProfile.setUser(user);
         return userProfile;
     }
 
@@ -153,12 +164,15 @@ public class UserProfileResourceIT {
         List<UserProfile> userProfileList = userProfileRepository.findAll();
         assertThat(userProfileList).hasSize(databaseSizeBeforeCreate + 1);
         UserProfile testUserProfile = userProfileList.get(userProfileList.size() - 1);
-        assertThat(testUserProfile.getUserId()).isEqualTo(DEFAULT_USER_ID);
         assertThat(testUserProfile.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
         assertThat(testUserProfile.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testUserProfile.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testUserProfile.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
         assertThat(testUserProfile.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
+        assertThat(testUserProfile.getFullName()).isEqualTo(DEFAULT_FULL_NAME);
+
+        // Validate the id for MapsId, the ids must be same
+        assertThat(testUserProfile.getId()).isEqualTo(testUserProfile.getUser().getId());
     }
 
     @Test
@@ -181,24 +195,42 @@ public class UserProfileResourceIT {
         assertThat(userProfileList).hasSize(databaseSizeBeforeCreate);
     }
 
-
     @Test
     @Transactional
-    public void checkUserIdIsRequired() throws Exception {
-        int databaseSizeBeforeTest = userProfileRepository.findAll().size();
-        // set the field null
-        userProfile.setUserId(null);
+    public void updateUserProfileMapsIdAssociationWithNewId() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+        int databaseSizeBeforeCreate = userProfileRepository.findAll().size();
 
-        // Create the UserProfile, which fails.
-        UserProfileDTO userProfileDTO = userProfileMapper.toDto(userProfile);
+        // Add a new parent entity
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
 
-        restUserProfileMockMvc.perform(post("/api/user-profiles")
+        // Load the userProfile
+        UserProfile updatedUserProfile = userProfileRepository.findById(userProfile.getId()).get();
+        // Disconnect from session so that the updates on updatedUserProfile are not directly saved in db
+        em.detach(updatedUserProfile);
+
+        // Update the User with new association value
+        updatedUserProfile.setUser(user);
+        UserProfileDTO updatedUserProfileDTO = userProfileMapper.toDto(updatedUserProfile);
+
+        // Update the entity
+        restUserProfileMockMvc.perform(put("/api/user-profiles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(userProfileDTO)))
-            .andExpect(status().isBadRequest());
+            .content(TestUtil.convertObjectToJsonBytes(updatedUserProfileDTO)))
+            .andExpect(status().isOk());
 
+        // Validate the UserProfile in the database
         List<UserProfile> userProfileList = userProfileRepository.findAll();
-        assertThat(userProfileList).hasSize(databaseSizeBeforeTest);
+        assertThat(userProfileList).hasSize(databaseSizeBeforeCreate);
+        UserProfile testUserProfile = userProfileList.get(userProfileList.size() - 1);
+
+        // Validate the id for MapsId, the ids must be same
+        // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
+        // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
+        // assertThat(testUserProfile.getId()).isEqualTo(testUserProfile.getUser().getId());
     }
 
     @Test
@@ -212,12 +244,12 @@ public class UserProfileResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userProfile.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.toString())))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL.toString())))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())))
-            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())));
+            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].fullName").value(hasItem(DEFAULT_FULL_NAME.toString())));
     }
     
     @Test
@@ -231,51 +263,12 @@ public class UserProfileResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(userProfile.getId().intValue()))
-            .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID.toString()))
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL.toString()))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS.toString()))
             .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT.toString()))
-            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()));
-    }
-
-    @Test
-    @Transactional
-    public void getAllUserProfilesByUserIdIsEqualToSomething() throws Exception {
-        // Initialize the database
-        userProfileRepository.saveAndFlush(userProfile);
-
-        // Get all the userProfileList where userId equals to DEFAULT_USER_ID
-        defaultUserProfileShouldBeFound("userId.equals=" + DEFAULT_USER_ID);
-
-        // Get all the userProfileList where userId equals to UPDATED_USER_ID
-        defaultUserProfileShouldNotBeFound("userId.equals=" + UPDATED_USER_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllUserProfilesByUserIdIsInShouldWork() throws Exception {
-        // Initialize the database
-        userProfileRepository.saveAndFlush(userProfile);
-
-        // Get all the userProfileList where userId in DEFAULT_USER_ID or UPDATED_USER_ID
-        defaultUserProfileShouldBeFound("userId.in=" + DEFAULT_USER_ID + "," + UPDATED_USER_ID);
-
-        // Get all the userProfileList where userId equals to UPDATED_USER_ID
-        defaultUserProfileShouldNotBeFound("userId.in=" + UPDATED_USER_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllUserProfilesByUserIdIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        userProfileRepository.saveAndFlush(userProfile);
-
-        // Get all the userProfileList where userId is not null
-        defaultUserProfileShouldBeFound("userId.specified=true");
-
-        // Get all the userProfileList where userId is null
-        defaultUserProfileShouldNotBeFound("userId.specified=false");
+            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()))
+            .andExpect(jsonPath("$.fullName").value(DEFAULT_FULL_NAME.toString()));
     }
 
     @Test
@@ -472,6 +465,61 @@ public class UserProfileResourceIT {
         // Get all the userProfileList where phoneNumber is null
         defaultUserProfileShouldNotBeFound("phoneNumber.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByFullNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where fullName equals to DEFAULT_FULL_NAME
+        defaultUserProfileShouldBeFound("fullName.equals=" + DEFAULT_FULL_NAME);
+
+        // Get all the userProfileList where fullName equals to UPDATED_FULL_NAME
+        defaultUserProfileShouldNotBeFound("fullName.equals=" + UPDATED_FULL_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByFullNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where fullName in DEFAULT_FULL_NAME or UPDATED_FULL_NAME
+        defaultUserProfileShouldBeFound("fullName.in=" + DEFAULT_FULL_NAME + "," + UPDATED_FULL_NAME);
+
+        // Get all the userProfileList where fullName equals to UPDATED_FULL_NAME
+        defaultUserProfileShouldNotBeFound("fullName.in=" + UPDATED_FULL_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByFullNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        userProfileRepository.saveAndFlush(userProfile);
+
+        // Get all the userProfileList where fullName is not null
+        defaultUserProfileShouldBeFound("fullName.specified=true");
+
+        // Get all the userProfileList where fullName is null
+        defaultUserProfileShouldNotBeFound("fullName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserProfilesByUserIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        User user = userProfile.getUser();
+        userProfileRepository.saveAndFlush(userProfile);
+        Long userId = user.getId();
+
+        // Get all the userProfileList where user equals to userId
+        defaultUserProfileShouldBeFound("userId.equals=" + userId);
+
+        // Get all the userProfileList where user equals to userId + 1
+        defaultUserProfileShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -480,12 +528,12 @@ public class UserProfileResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userProfile.getId().intValue())))
-            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID)))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY)))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT)))
-            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)));
+            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)))
+            .andExpect(jsonPath("$.[*].fullName").value(hasItem(DEFAULT_FULL_NAME)));
 
         // Check, that the count call also returns 1
         restUserProfileMockMvc.perform(get("/api/user-profiles/count?sort=id,desc&" + filter))
@@ -533,12 +581,12 @@ public class UserProfileResourceIT {
         // Disconnect from session so that the updates on updatedUserProfile are not directly saved in db
         em.detach(updatedUserProfile);
         updatedUserProfile
-            .userId(UPDATED_USER_ID)
             .imageUrl(UPDATED_IMAGE_URL)
             .city(UPDATED_CITY)
             .address(UPDATED_ADDRESS)
             .district(UPDATED_DISTRICT)
-            .phoneNumber(UPDATED_PHONE_NUMBER);
+            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .fullName(UPDATED_FULL_NAME);
         UserProfileDTO userProfileDTO = userProfileMapper.toDto(updatedUserProfile);
 
         restUserProfileMockMvc.perform(put("/api/user-profiles")
@@ -550,12 +598,12 @@ public class UserProfileResourceIT {
         List<UserProfile> userProfileList = userProfileRepository.findAll();
         assertThat(userProfileList).hasSize(databaseSizeBeforeUpdate);
         UserProfile testUserProfile = userProfileList.get(userProfileList.size() - 1);
-        assertThat(testUserProfile.getUserId()).isEqualTo(UPDATED_USER_ID);
         assertThat(testUserProfile.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
         assertThat(testUserProfile.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testUserProfile.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testUserProfile.getDistrict()).isEqualTo(UPDATED_DISTRICT);
         assertThat(testUserProfile.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
+        assertThat(testUserProfile.getFullName()).isEqualTo(UPDATED_FULL_NAME);
     }
 
     @Test

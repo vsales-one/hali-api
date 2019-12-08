@@ -26,8 +26,6 @@ public class UserProfileCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter userId;
-
     private StringFilter imageUrl;
 
     private StringFilter city;
@@ -38,17 +36,22 @@ public class UserProfileCriteria implements Serializable, Criteria {
 
     private StringFilter phoneNumber;
 
+    private StringFilter fullName;
+
+    private LongFilter userId;
+
     public UserProfileCriteria(){
     }
 
     public UserProfileCriteria(UserProfileCriteria other){
         this.id = other.id == null ? null : other.id.copy();
-        this.userId = other.userId == null ? null : other.userId.copy();
         this.imageUrl = other.imageUrl == null ? null : other.imageUrl.copy();
         this.city = other.city == null ? null : other.city.copy();
         this.address = other.address == null ? null : other.address.copy();
         this.district = other.district == null ? null : other.district.copy();
         this.phoneNumber = other.phoneNumber == null ? null : other.phoneNumber.copy();
+        this.fullName = other.fullName == null ? null : other.fullName.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
     }
 
     @Override
@@ -62,14 +65,6 @@ public class UserProfileCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getUserId() {
-        return userId;
-    }
-
-    public void setUserId(StringFilter userId) {
-        this.userId = userId;
     }
 
     public StringFilter getImageUrl() {
@@ -112,6 +107,22 @@ public class UserProfileCriteria implements Serializable, Criteria {
         this.phoneNumber = phoneNumber;
     }
 
+    public StringFilter getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(StringFilter fullName) {
+        this.fullName = fullName;
+    }
+
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -124,24 +135,26 @@ public class UserProfileCriteria implements Serializable, Criteria {
         final UserProfileCriteria that = (UserProfileCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(userId, that.userId) &&
             Objects.equals(imageUrl, that.imageUrl) &&
             Objects.equals(city, that.city) &&
             Objects.equals(address, that.address) &&
             Objects.equals(district, that.district) &&
-            Objects.equals(phoneNumber, that.phoneNumber);
+            Objects.equals(phoneNumber, that.phoneNumber) &&
+            Objects.equals(fullName, that.fullName) &&
+            Objects.equals(userId, that.userId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        userId,
         imageUrl,
         city,
         address,
         district,
-        phoneNumber
+        phoneNumber,
+        fullName,
+        userId
         );
     }
 
@@ -149,12 +162,13 @@ public class UserProfileCriteria implements Serializable, Criteria {
     public String toString() {
         return "UserProfileCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (userId != null ? "userId=" + userId + ", " : "") +
                 (imageUrl != null ? "imageUrl=" + imageUrl + ", " : "") +
                 (city != null ? "city=" + city + ", " : "") +
                 (address != null ? "address=" + address + ", " : "") +
                 (district != null ? "district=" + district + ", " : "") +
                 (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "") +
+                (fullName != null ? "fullName=" + fullName + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
             "}";
     }
 
