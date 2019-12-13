@@ -95,7 +95,7 @@ public class UserProfileServiceImpl implements UserProfileService {
            throw new BadRequestAlertException("A new userProfile cannot already have an ID", "UserProfile", "idexists");
 
        UserProfile userProfile = optionalUserProfile.get();
-
+        userProfile.setPhoneNumber(userProfileDTO.getPhoneNumber());
        userProfile.setAddress(userProfileDTO.getAddress());
        userProfile.setCity(userProfileDTO.getCity());
        userProfile.setDistrict(userProfileDTO.getDistrict());

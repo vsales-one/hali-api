@@ -104,7 +104,6 @@ public class PostingItem implements Serializable {
     }
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @NotNull
     @JoinColumn(name="last_modified_by", nullable=false,referencedColumnName = "user_id", insertable =  false, updatable = false)
     private UserProfile userProfile;
 

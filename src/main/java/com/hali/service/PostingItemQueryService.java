@@ -31,6 +31,8 @@ import com.hali.service.mapper.PostingItemMapper;
 @Transactional(readOnly = true)
 public class PostingItemQueryService extends QueryService<PostingItem> {
 
+    static final String HAVERSINE_PART = "(6371 * acos(cos(radians(:latitude)) * cos(radians(m.latitude)) * cos(radians(m.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(m.latitude))))";
+
     private final Logger log = LoggerFactory.getLogger(PostingItemQueryService.class);
 
     private final PostingItemRepository postingItemRepository;
@@ -84,7 +86,7 @@ public class PostingItemQueryService extends QueryService<PostingItem> {
      * Function to convert ConsumerCriteria to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<PostingItem> createSpecification(PostingItemCriteria criteria) {
         Specification<PostingItem> specification = Specification.where(null);
         if (criteria != null) {
